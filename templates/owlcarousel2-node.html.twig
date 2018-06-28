@@ -1,0 +1,18 @@
+{% if content %}
+
+  <article{{ attributes.addClass('owlcarousel-node') }}>
+
+    {% if label %}
+      {{ title_prefix }}
+      <h2{{ title_attributes }}>
+        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h2>
+      {{ title_suffix }}
+    {% endif %}
+
+    <div{{ content_attributes.addClass('node__content', 'owlcarousel-node-content') }}>
+      {{ content }}
+    </div>
+
+  </article>
+{% endif %}
