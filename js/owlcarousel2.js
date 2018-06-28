@@ -3,7 +3,6 @@
     attach: function (context, settings) {
       // alert(settings.myVar);
       var owl_settings = settings.owlcarousel_settings;
-      console.log(owl_settings);
       $(document).ready(function () {
         $('.owl-carousel').owlCarousel({
           video: true,
@@ -20,48 +19,7 @@
           animateOut: owl_settings.animateOut,
           dotClass: owl_settings.dotClass ? owl_settings.dotClass : 'owl-dot',
           dotsClass: owl_settings.dotsClass ? owl_settings.dotsClass : 'owl-dots'
-
-          // video: true,
-          // animateIn: owl_settings.animateIn,
-          // animateOut: owl_settings.animateOut,
-          // autoplay: owl_settings.autoplay,
-          // autoplaySpeed: owl_settings.autoplaySpeed,
-          // autoplayTimeout: owl_settings.autoplayTimeout,
-          // items: owl_settings.items_per_slide,
-          // lazyLoad: owl_settings.lazyLoad,
-          // dots: owl_settings.dots,
-          // nav: owl_settings.nav,
-          // loop: owl_settings.loop
         });
-          // {
-          // loop: true,
-          // margin: 10,
-          // nav: false,
-          // items: 1,
-          // autoplay: false,
-          // autoplaySpeed: 2000,
-          // autoplayTimeout: 5000,
-          // video: true,
-          // dots: true,
-          // lazyLoad: false,
-          // animateIn: '',//'flipInX', //
-          // animateOut: ''//'slideOutDown', //Type: String/Boolean Default: false Class for CSS3 animation out.
-          //
-
-          // ,responsive:{
-          //   0:{
-          //     items:1
-          //   },
-          //   600:{
-          //     items:3
-          //   },
-          //   1000:{
-          //     items:5
-          //   }
-          // }
-
-
-        // });
 
         // Video adjust
         var videoThumb = $(".owl-video-tn");

@@ -6,9 +6,8 @@ owlcarousel2:
       css/animate.css: {}
       css/owlcarousel2.css: {}
   js:
-    /libraries/OwlCarousel2/dist/owl.carousel.js: {}
+    /libraries/OwlCarousel2/dist/owl.carousel.min.js: {}
     js/owlcarousel2.js: {}
-#    js/owlcarousel2-responsive-video-height.js: {}
 
   dependencies:
     - core/jquery
