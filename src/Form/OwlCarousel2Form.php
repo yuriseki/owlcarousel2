@@ -79,6 +79,18 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['autoplay']) ? $settings['autoplay'] : 'yes',
     ];
 
+    $form['settings']['autoplayHoverPause'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Pause auto play on mouse over'),
+      '#description'   => $this->t('If the auto play will pause when mouse over.'),
+      '#required'      => TRUE,
+      '#options'       => [
+        'true'  => $this->t('Yes'),
+        'false' => $this->t('No'),
+      ],
+      '#default_value' => isset($settings['autoplayHoverPause']) ? $settings['autoplayHoverPause'] : 'yes',
+    ];
+
     $form['settings']['autoplaySpeed'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Auto play speed'),

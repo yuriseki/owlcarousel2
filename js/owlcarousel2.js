@@ -1,7 +1,7 @@
 (function ($) {
   Drupal.behaviors.owl = {
     attach: function (context, settings) {
-      // alert(settings.myVar);
+      console.log(settings.owlcarousel_settings);
       var owl_settings = settings.owlcarousel_settings;
       $(document).ready(function () {
         $('.owl-carousel').owlCarousel({
@@ -15,6 +15,7 @@
           autoplayTimeout: parseInt(owl_settings.autoplayTimeout),
           dots: owl_settings.dots == "true",
           lazyLoad: owl_settings.lazyLoad == "true",
+          autoplayHoverPause: owl_settings.autoplayHoverPause == "true",
           animateIn: owl_settings.animateIn,
           animateOut: owl_settings.animateOut,
           dotClass: owl_settings.dotClass ? owl_settings.dotClass : 'owl-dot',
@@ -28,7 +29,6 @@
           var image = $(this).css('background-image');
           var arr = image.split("/");
 
-          // TODO do the same fot vimeo thumbnail.
           if (arr[2] === "img.youtube.com") {
             arr[arr.length - 1] = "maxresdefault.jpg\")";
             image = arr.join('/');
