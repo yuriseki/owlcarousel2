@@ -1,0 +1,22 @@
+{#
+/**
+ * @file owlcarousel2.html.twig
+ * Default theme implementation to present OwlCarousel2 data.
+ *
+ * This template is used when viewing OwlCarousel2 pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_owlcarousel2()
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="owl-carousel owl-theme" {{ attributes.addClass('owlcarousel2') }}>
+  {% if content %}
+    {{ content }}
+  {% endif %}
+</div>
