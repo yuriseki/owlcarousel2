@@ -27,12 +27,18 @@ class CarouselBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
+
+    $carousel = FALSE;
+    if (isset($this->configuration['carousel_id'])) {
+      $carousel = OwlCarousel2::load($this->configuration['carousel_id']);
+    }
+
     $form['carousel_id'] = [
       '#type'          => 'entity_autocomplete',
       '#title'         => $this->t('Carousel'),
       '#description'   => $this->t('Select the carousel'),
       '#target_type'   => 'owlcarousel2',
-      '#default_value' => isset($this->configuration['carousel_id']) ? $this->configuration['carousel_id'] : '',
+      '#default_value' => $carousel,
       '#weight'        => '10',
       '#required'      => TRUE,
     ];
