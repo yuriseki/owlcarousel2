@@ -111,7 +111,7 @@ class OwlCarousel2Item {
    * @param bool $display_node_title
    *   The display_node_title.
    */
-  public function setDisplayNodeTitle(bool $display_node_title) {
+  public function setDisplayNodeTitle($display_node_title) {
     $this->display_node_title = $display_node_title;
   }
 
