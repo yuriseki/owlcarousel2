@@ -3,6 +3,7 @@
 namespace Drupal\owlcarousel2\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
@@ -17,6 +18,30 @@ use Drupal\views\Entity\View;
  * @ingroup owlcarousel2
  */
 class OwlCarousel2Form extends ContentEntityForm {
+
+  /**
+   * The fileStorage.
+   *
+   * @var \Drupal\file\FileStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
+   * The entityStorage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $entityStorage;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(EntityManagerInterface $entity_manager) {
+    parent::__construct($entity_manager);
+
+    $this->fileStorage = $entity_manager->getStorage('file');
+    $this->entityStorage = $entity_manager->getStorage('node');
+  }
 
   /**
    * {@inheritdoc}
@@ -227,7 +252,7 @@ class OwlCarousel2Form extends ContentEntityForm {
 
         $image = FALSE;
         if ($item['file_id']) {
-          $file = File::load($item['file_id']);
+          $file = $this->fileStorage->load($item['file_id']);
           $image = [
             '#theme'      => 'image_style',
             '#style_name' => 'thumbnail',
@@ -237,7 +262,8 @@ class OwlCarousel2Form extends ContentEntityForm {
 
         $node_link = FALSE;
         if ($item['entity_id']) {
-          $node = Node::load($item['entity_id']);
+          /** @var \Drupal\node\Entity\Node $node */
+          $node = $this->entityStorage->load($item['entity_id']);
           if ($node instanceof Node) {
             $node_link = Link::fromTextAndUrl($node->getTitle(), $node->toUrl());
           }
@@ -371,7 +397,7 @@ class OwlCarousel2Form extends ContentEntityForm {
 
       // If a new revision is created, save the current user as revision author.
       $entity->setRevisionCreationTime(REQUEST_TIME);
-      $entity->setRevisionUserId(\Drupal::currentUser()->id());
+      $entity->setRevisionUserId($this->currentUser()->id());
     }
     else {
       $entity->setNewRevision(FALSE);

@@ -21,8 +21,7 @@ use Drupal\Core\Render\Element;
  */
 function template_preprocess_owlcarousel2(array &$variables) {
   // Fetch OwlCarousel2 Entity Object.
-  $owlcarousel2 = $variables['elements']['#owlcarousel2'];
-
+  // $owlcarousel2 = $variables['elements']['#owlcarousel2'];
   // Helpful $content variable for templates.
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];

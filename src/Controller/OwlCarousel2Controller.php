@@ -7,6 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Url;
 use Drupal\owlcarousel2\Entity\OwlCarousel2Interface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class OwlCarousel2Controller.
@@ -14,6 +15,35 @@ use Drupal\owlcarousel2\Entity\OwlCarousel2Interface;
  *  Returns responses for OwlCarousel2 routes.
  */
 class OwlCarousel2Controller extends ControllerBase implements ContainerInjectionInterface {
+
+  /**
+   * Date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatter
+   */
+  protected $dateFormatter;
+
+  /**
+   * Renderer service.
+   *
+   * @var \Drupal\Core\Render\Renderer
+   */
+  protected $renderer;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(ContainerInterface $container) {
+    $this->dateFormatter = $container->get('date.formatter');
+    $this->renderer = $container->get('renderer');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static($container);
+  }
 
   /**
    * Displays a OwlCarousel2  revision.
@@ -48,7 +78,7 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
       ->loadRevision($owlcarousel2_revision);
     return $this->t('Revision of %title from %date', [
       '%title' => $owlcarousel2->label(),
-      '%date'  => format_date($owlcarousel2->getRevisionCreationTime()),
+      '%date'  => $this->dateFormatter->format($owlcarousel2->getRevisionCreationTime()),
     ]);
   }
 
@@ -89,15 +119,16 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
       $revision = $owlcarousel2_storage->loadRevision($vid);
       // Only show revisions that are affected by the language that is being
       // displayed.
-      if ($revision->hasTranslation($langcode) && $revision->getTranslation($langcode)->isRevisionTranslationAffected()) {
+      if ($revision->hasTranslation($langcode) && $revision->getTranslation($langcode)
+        ->isRevisionTranslationAffected()
+      ) {
         $username = [
           '#theme'   => 'username',
           '#account' => $revision->getRevisionUser(),
         ];
 
         // Use revision link to link to revisions that are not active.
-        $date = \Drupal::service('date.formatter')
-          ->format($revision->getRevisionCreationTime(), 'short');
+        $date = $this->dateFormatter->format($revision->getRevisionCreationTime(), 'short');
         if ($vid != $owlcarousel2->getRevisionId()) {
           $link = $this->l($date, new Url('entity.owlcarousel2.revision', [
             'owlcarousel2'          => $owlcarousel2->id(),
@@ -115,8 +146,7 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
             '#template' => '{% trans %}{{ date }} by {{ username }}{% endtrans %}{% if message %}<p class="revision-log">{{ message }}</p>{% endif %}',
             '#context'  => [
               'date'     => $link,
-              'username' => \Drupal::service('renderer')
-                ->renderPlain($username),
+              'username' => $this->renderer->renderPlain($username),
               'message'  => [
                 '#markup'       => $revision->getRevisionLogMessage(),
                 '#allowed_tags' => Xss::getHtmlTagList(),
@@ -146,16 +176,16 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
               'title' => $this->t('Revert'),
               'url'   => $has_translations ?
               Url::fromRoute('entity.owlcarousel2.translation_revert',
-                [
-                  'owlcarousel2'          => $owlcarousel2->id(),
-                  'owlcarousel2_revision' => $vid,
-                  'langcode'              => $langcode,
-                ]) :
+                  [
+                    'owlcarousel2'          => $owlcarousel2->id(),
+                    'owlcarousel2_revision' => $vid,
+                    'langcode'              => $langcode,
+                  ]) :
               Url::fromRoute('entity.owlcarousel2.revision_revert',
-                [
-                  'owlcarousel2'          => $owlcarousel2->id(),
-                  'owlcarousel2_revision' => $vid,
-                ]),
+                  [
+                    'owlcarousel2'          => $owlcarousel2->id(),
+                    'owlcarousel2_revision' => $vid,
+                  ]),
             ];
           }
 
