@@ -46,7 +46,7 @@ function owlcarousel2_theme() {
       'base hook' => 'node',
     ],
     'owlcarousel2_block'      => [
-      'variables' => ['content' => NULL],
+      'variables' => ['content' => NULL, 'id' => NULL],
       'template'  => 'block--owlcarousel2',
     ],
   ];
@@ -65,9 +65,28 @@ function owlcarousel2_preprocess_owlcarousel2(&$variables) {
   $settings = $carousel->get('settings')->getValue()[0];
 
   $variables['content']['#markup']     = Markup::create($content);
+  $variables['id']                     = $carousel->id();
   $variables['#attached']['library'][] = 'owlcarousel2/owlcarousel2';
 
-  $variables['#attached']['drupalSettings']['owlcarousel_settings'] = $settings;
+  $container = \Drupal::getContainer();
+  /** @var \Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface $key_value */
+  $key_value = $container->get('keyvalue.expirable');
+  $key_value->get('owlcarousel2')->set($carousel->id(), $settings);
+  $keyed_settings = $key_value->get('owlcarousel2')->getAll();
+
+  $variables['#attached']['drupalSettings']['owlcarousel_settings'] = $keyed_settings;
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function owlcarousel2_preprocess_html(&$variables) {
+  // Clear the carousel key/par settings to avoid garbage.
+  $container = \Drupal::getContainer();
+  /** @var \Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface $key_value */
+  $key_value = $container->get('keyvalue.expirable');
+  $key_value->get('owlcarousel2')->deleteAll();
 
 }
 
@@ -99,7 +118,7 @@ function owlcarousel2_get_carousel($owlcarousel_id) {
         $node = is_null($item['entity_id']) ? FALSE : Node::load($item['entity_id']);
         if ($node) {
           // Store title to restore it latter.
-          $title = $node->getTitle();
+          $title             = $node->getTitle();
           $node_render_array = ['#theme' => 'owlcarousel2_node'];
           if (isset($item['display_node_title']) && !$item['display_node_title']) {
             $node->setTitle('');
