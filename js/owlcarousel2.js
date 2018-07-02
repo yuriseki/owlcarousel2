@@ -1,7 +1,9 @@
 (function ($) {
+
+  'use strict';
+
   Drupal.behaviors.owl = {
     attach: function (context, settings) {
-      console.log(settings.owlcarousel_settings);
       var owl_settings = settings.owlcarousel_settings;
       $(document).ready(function () {
         $('.owl-carousel').owlCarousel({
@@ -10,7 +12,7 @@
           margin: 10,
           nav: owl_settings.nav === 'true',
           items: parseInt(owl_settings.items_per_slide),
-          autoplay: owl_settings.autoplay  === 'true',
+          autoplay: owl_settings.autoplay === 'true',
           autoplaySpeed: parseInt(owl_settings.autoplaySpeed),
           autoplayTimeout: parseInt(owl_settings.autoplayTimeout),
           dots: owl_settings.dots === 'true',
