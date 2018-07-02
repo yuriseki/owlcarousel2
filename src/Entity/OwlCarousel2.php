@@ -208,9 +208,8 @@ class OwlCarousel2 extends RevisionableContentEntityBase implements OwlCarousel2
    *   The item to be updated.
    */
   public function updateItem(OwlCarousel2Item $item) {
-    $item          = $item->getArray();
-    $previous_item = $this->getItem($item['id']);
-    $items         = $this->getItems();
+    $item = $item->getArray();
+    $items = $this->getItems();
     foreach ($items[0] as $key => $value) {
       if ($value['id'] == $item['id']) {
         $items[0][$key] = $item;

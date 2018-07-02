@@ -144,7 +144,7 @@ function owlcarousel2_get_carousel($owlcarousel_id) {
         if ($view->execute()) {
           $view_result = $view->result;
           /** @var \Drupal\views\ResultRow $resultRow */
-          foreach ($view_result as $key => $resultRow) {
+          foreach ($view_result as $resultRow) {
             /** @var \Drupal\node\Entity\Node $node */
             $node              = $resultRow->_entity;
             $node_render_array = ['#theme' => 'owlcarousel2_node'];

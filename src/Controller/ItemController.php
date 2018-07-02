@@ -4,8 +4,8 @@ namespace Drupal\owlcarousel2\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\file\Entity\File;
 use Drupal\owlcarousel2\Entity\OwlCarousel2;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -14,6 +14,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @package Drupal\owlcarousel2\Controller
  */
 class ItemController extends ControllerBase {
+
+  /**
+   * The fileStorage.
+   *
+   * @var \Drupal\file\FileStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(ContainerInterface $container) {
+    $this->fileStorage = $container->get('entity_type.manager')->getStorage('file');
+  }
 
   /**
    * Revmove one item from OwlCarousel2.
@@ -35,7 +49,7 @@ class ItemController extends ControllerBase {
 
         // Delete the image file.
         if (isset($value['file_id'])) {
-          $file = File::load($value['file_id']);
+          $file = $this->fileStorage->load($value['file_id']);
           $file->delete();
         }
         break;
