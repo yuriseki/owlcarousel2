@@ -192,7 +192,7 @@ class OwlCarousel2Form extends ContentEntityForm {
 
     /** @var \Drupal\owlcarousel2\Entity\OwlCarousel2 $entity */
     $entity = $this->entity;
-    $items  = $entity->getItems();
+    $items = $entity->getItems();
     uasort($items[0], function ($a, $b) {
       return $a['weight'] < $b['weight'] ? -1 : 1;
     });
@@ -227,7 +227,7 @@ class OwlCarousel2Form extends ContentEntityForm {
 
         $image = FALSE;
         if ($item['file_id']) {
-          $file  = File::load($item['file_id']);
+          $file = File::load($item['file_id']);
           $image = [
             '#theme'      => 'image_style',
             '#style_name' => 'thumbnail',

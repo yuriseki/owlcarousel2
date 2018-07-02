@@ -10,5 +10,4 @@ use Drupal\content_translation\ContentTranslationHandler;
 class OwlCarousel2TranslationHandler extends ContentTranslationHandler {
 
   // Override here the needed methods from ContentTranslationHandler.
-
 }

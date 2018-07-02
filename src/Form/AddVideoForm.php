@@ -76,9 +76,9 @@ class AddVideoForm extends AddItemForm {
       $carousel->addItem($item);
     }
     else {
-      $item_array['id'] = $form_state->getValue('item_id');
-      $item_array['weight']  = $form_state->getValue('weight');
-      $item                  = new OwlCarousel2Item($item_array);
+      $item_array['id']     = $form_state->getValue('item_id');
+      $item_array['weight'] = $form_state->getValue('weight');
+      $item                 = new OwlCarousel2Item($item_array);
       $carousel->updateItem($item);
     }
 

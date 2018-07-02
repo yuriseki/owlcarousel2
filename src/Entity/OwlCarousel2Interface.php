@@ -14,8 +14,6 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface OwlCarousel2Interface extends ContentEntityInterface, RevisionLogInterface, EntityChangedInterface, EntityOwnerInterface {
 
-  // Add get/set methods for your configuration properties here.
-
   /**
    * Gets the OwlCarousel2 name.
    *
@@ -121,4 +119,5 @@ interface OwlCarousel2Interface extends ContentEntityInterface, RevisionLogInter
    *   Array of carousel items.
    */
   public function getItems();
+
 }

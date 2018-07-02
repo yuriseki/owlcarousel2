@@ -8,6 +8,7 @@
   vertical-align: top;
 }
 
-#custom-wrapper, #view-wrapper {
+#custom-wrapper,
+#view-wrapper {
   display: none;
 }

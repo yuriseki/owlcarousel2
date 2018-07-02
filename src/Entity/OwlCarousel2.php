@@ -119,8 +119,8 @@ class OwlCarousel2 extends RevisionableContentEntityBase implements OwlCarousel2
       }
     }
 
-    // If no revision author has been set explicitly, make the owlcarousel2 owner the
-    // revision author.
+    // If no revision author has been set explicitly, make the owlcarousel2
+    // owner the revision author.
     if (!$this->getRevisionUser()) {
       $this->setRevisionUserId($this->getOwnerId());
     }
@@ -205,6 +205,7 @@ class OwlCarousel2 extends RevisionableContentEntityBase implements OwlCarousel2
    * Update an carousel item.
    *
    * @param \Drupal\owlcarousel2\OwlCarousel2Item $item
+   *   The item to be updated.
    */
   public function updateItem(OwlCarousel2Item $item) {
     $item          = $item->getArray();
@@ -234,8 +235,7 @@ class OwlCarousel2 extends RevisionableContentEntityBase implements OwlCarousel2
    * @param \Drupal\owlcarousel2\OwlCarousel2Item $item
    *   The item to be added.
    */
-  public function addItem($item) {
-    /** @var \Drupal\Core\Field\MapFieldItemList $settings */
+  public function addItem(OwlCarousel2Item $item) {
     $items           = $this->getItems();
     $array           = $item->getArray();
     $array['weight'] = count($items[0]) + 1;

@@ -25,7 +25,9 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
    *   An array suitable for drupal_render().
    */
   public function revisionShow($owlcarousel2_revision) {
-    $owlcarousel2 = $this->entityManager()->getStorage('owlcarousel2')->loadRevision($owlcarousel2_revision);
+    $owlcarousel2 = $this->entityManager()
+      ->getStorage('owlcarousel2')
+      ->loadRevision($owlcarousel2_revision);
     $view_builder = $this->entityManager()->getViewBuilder('owlcarousel2');
 
     return $view_builder->view($owlcarousel2);
@@ -41,8 +43,13 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
    *   The page title.
    */
   public function revisionPageTitle($owlcarousel2_revision) {
-    $owlcarousel2 = $this->entityManager()->getStorage('owlcarousel2')->loadRevision($owlcarousel2_revision);
-    return $this->t('Revision of %title from %date', ['%title' => $owlcarousel2->label(), '%date' => format_date($owlcarousel2->getRevisionCreationTime())]);
+    $owlcarousel2 = $this->entityManager()
+      ->getStorage('owlcarousel2')
+      ->loadRevision($owlcarousel2_revision);
+    return $this->t('Revision of %title from %date', [
+      '%title' => $owlcarousel2->label(),
+      '%date'  => format_date($owlcarousel2->getRevisionCreationTime()),
+    ]);
   }
 
   /**
@@ -55,15 +62,18 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
    *   An array as expected by drupal_render().
    */
   public function revisionOverview(OwlCarousel2Interface $owlcarousel2) {
-    $account = $this->currentUser();
-    $langcode = $owlcarousel2->language()->getId();
-    $langname = $owlcarousel2->language()->getName();
-    $languages = $owlcarousel2->getTranslationLanguages();
-    $has_translations = (count($languages) > 1);
+    $account              = $this->currentUser();
+    $langcode             = $owlcarousel2->language()->getId();
+    $langname             = $owlcarousel2->language()->getName();
+    $languages            = $owlcarousel2->getTranslationLanguages();
+    $has_translations     = (count($languages) > 1);
     $owlcarousel2_storage = $this->entityManager()->getStorage('owlcarousel2');
 
-    $build['#title'] = $has_translations ? $this->t('@langname revisions for %title', ['@langname' => $langname, '%title' => $owlcarousel2->label()]) : $this->t('Revisions for %title', ['%title' => $owlcarousel2->label()]);
-    $header = [$this->t('Revision'), $this->t('Operations')];
+    $build['#title'] = $has_translations ? $this->t('@langname revisions for %title', [
+      '@langname' => $langname,
+      '%title'    => $owlcarousel2->label(),
+    ]) : $this->t('Revisions for %title', ['%title' => $owlcarousel2->label()]);
+    $header          = [$this->t('Revision'), $this->t('Operations')];
 
     $revert_permission = (($account->hasPermission("revert all owlcarousel2 revisions") || $account->hasPermission('administer owlcarousel2 entities')));
     $delete_permission = (($account->hasPermission("delete all owlcarousel2 revisions") || $account->hasPermission('administer owlcarousel2 entities')));
@@ -81,32 +91,40 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
       // displayed.
       if ($revision->hasTranslation($langcode) && $revision->getTranslation($langcode)->isRevisionTranslationAffected()) {
         $username = [
-          '#theme' => 'username',
+          '#theme'   => 'username',
           '#account' => $revision->getRevisionUser(),
         ];
 
         // Use revision link to link to revisions that are not active.
-        $date = \Drupal::service('date.formatter')->format($revision->getRevisionCreationTime(), 'short');
+        $date = \Drupal::service('date.formatter')
+          ->format($revision->getRevisionCreationTime(), 'short');
         if ($vid != $owlcarousel2->getRevisionId()) {
-          $link = $this->l($date, new Url('entity.owlcarousel2.revision', ['owlcarousel2' => $owlcarousel2->id(), 'owlcarousel2_revision' => $vid]));
+          $link = $this->l($date, new Url('entity.owlcarousel2.revision', [
+            'owlcarousel2'          => $owlcarousel2->id(),
+            'owlcarousel2_revision' => $vid,
+          ]));
         }
         else {
           $link = $owlcarousel2->link($date);
         }
 
-        $row = [];
+        $row    = [];
         $column = [
           'data' => [
-            '#type' => 'inline_template',
+            '#type'     => 'inline_template',
             '#template' => '{% trans %}{{ date }} by {{ username }}{% endtrans %}{% if message %}<p class="revision-log">{{ message }}</p>{% endif %}',
-            '#context' => [
-              'date' => $link,
-              'username' => \Drupal::service('renderer')->renderPlain($username),
-              'message' => ['#markup' => $revision->getRevisionLogMessage(), '#allowed_tags' => Xss::getHtmlTagList()],
+            '#context'  => [
+              'date'     => $link,
+              'username' => \Drupal::service('renderer')
+                ->renderPlain($username),
+              'message'  => [
+                '#markup'       => $revision->getRevisionLogMessage(),
+                '#allowed_tags' => Xss::getHtmlTagList(),
+              ],
             ],
           ],
         ];
-        $row[] = $column;
+        $row[]  = $column;
 
         if ($latest_revision) {
           $row[] = [
@@ -126,22 +144,34 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
           if ($revert_permission) {
             $links['revert'] = [
               'title' => $this->t('Revert'),
-              'url' => $has_translations ?
-              Url::fromRoute('entity.owlcarousel2.translation_revert', ['owlcarousel2' => $owlcarousel2->id(), 'owlcarousel2_revision' => $vid, 'langcode' => $langcode]) :
-              Url::fromRoute('entity.owlcarousel2.revision_revert', ['owlcarousel2' => $owlcarousel2->id(), 'owlcarousel2_revision' => $vid]),
+              'url'   => $has_translations ?
+              Url::fromRoute('entity.owlcarousel2.translation_revert',
+                [
+                  'owlcarousel2'          => $owlcarousel2->id(),
+                  'owlcarousel2_revision' => $vid,
+                  'langcode'              => $langcode,
+                ]) :
+              Url::fromRoute('entity.owlcarousel2.revision_revert',
+                [
+                  'owlcarousel2'          => $owlcarousel2->id(),
+                  'owlcarousel2_revision' => $vid,
+                ]),
             ];
           }
 
           if ($delete_permission) {
             $links['delete'] = [
               'title' => $this->t('Delete'),
-              'url' => Url::fromRoute('entity.owlcarousel2.revision_delete', ['owlcarousel2' => $owlcarousel2->id(), 'owlcarousel2_revision' => $vid]),
+              'url'   => Url::fromRoute('entity.owlcarousel2.revision_delete', [
+                'owlcarousel2'          => $owlcarousel2->id(),
+                'owlcarousel2_revision' => $vid,
+              ]),
             ];
           }
 
           $row[] = [
             'data' => [
-              '#type' => 'operations',
+              '#type'  => 'operations',
               '#links' => $links,
             ],
           ];
@@ -152,8 +182,8 @@ class OwlCarousel2Controller extends ControllerBase implements ContainerInjectio
     }
 
     $build['owlcarousel2_revisions_table'] = [
-      '#theme' => 'table',
-      '#rows' => $rows,
+      '#theme'  => 'table',
+      '#rows'   => $rows,
       '#header' => $header,
     ];
 

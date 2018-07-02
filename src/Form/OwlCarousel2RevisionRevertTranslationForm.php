@@ -10,7 +10,7 @@ use Drupal\owlcarousel2\Entity\OwlCarousel2Interface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a form for reverting a OwlCarousel2 revision for a single translation.
+ * Provides form for reverting a OwlCarousel2 revision for a single translation.
  *
  * @ingroup owlcarousel2
  */

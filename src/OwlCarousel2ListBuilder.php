@@ -13,7 +13,6 @@ use Drupal\Core\Link;
  */
 class OwlCarousel2ListBuilder extends EntityListBuilder {
 
-
   /**
    * {@inheritdoc}
    */

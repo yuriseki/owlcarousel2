@@ -31,4 +31,3 @@ new block wherever tou want.
 
 PS: You can use Display Suite or Page Manager to configure the OwlCarousel2 
 blocks as well.
-

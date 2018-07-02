@@ -23,7 +23,7 @@ function owlcarousel2_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<h3>' . t('About') . '</h3>';
       $output .= '<p>' . t('OwlCarousel2 Implementation, full featured with youtube support, and tons of slide effects.') . '</p>';
       $output .= '<p>' . t('See the script repository on <a href="https://github.com/OwlCarousel2/OwlCarousel2">Github</a>') . '</p>';
-      $output .= '<p>' . t('<a href="https://github.com/OwlCarousel2/OwlCarousel2/archive/2.3.4.zip">Click here to download the script</a> and copy the <strong><code>dist</code></strong> folder under <strong><code>{Drupal Installation}/libraries/OwlCarousel2</code></strong> ') . '</p>';
+      $output .= '<p>' . t('<a href="https://github.com/OwlCarousel2/OwlCarousel2/archive/2.3.4.zip">Click here to download the script</a> and copy the <strong><code>dist</code></strong> folder under <strong><code>{Drupal Installation}/libraries/OwlCarousel2</code></strong>') . '</p>';
       return $output;
 
     default:
@@ -61,7 +61,7 @@ function owlcarousel2_preprocess_owlcarousel2(&$variables) {
   $elements = $variables['elements'];
   /** @var \Drupal\owlcarousel2\Entity\OwlCarousel2 $carousel */
   $carousel = $elements['#owlcarousel2'];
-  $content  = owlcarousel2_get_carousel($carousel->id());
+  $content = owlcarousel2_get_carousel($carousel->id());
   $settings = $carousel->get('settings')->getValue()[0];
 
   $variables['content']['#markup']     = Markup::create($content);
@@ -72,9 +72,13 @@ function owlcarousel2_preprocess_owlcarousel2(&$variables) {
 }
 
 /**
+ * Get the OwlCarousel2 rendered string.
+ *
  * @param int $owlcarousel_id
+ *   The carousel id.
  *
  * @return string
+ *   The OwlCarousel HTML.
  */
 function owlcarousel2_get_carousel($owlcarousel_id) {
   $carousel = OwlCarousel2::load($owlcarousel_id);
@@ -85,7 +89,7 @@ function owlcarousel2_get_carousel($owlcarousel_id) {
     foreach ($items as $item) {
       $item_display = '';
       if ($item['type'] == 'image') {
-        $file  = File::load($item['file_id']);
+        $file = File::load($item['file_id']);
         $image = [
           '#theme'      => 'image_style',
           '#style_name' => $item['image_style'],

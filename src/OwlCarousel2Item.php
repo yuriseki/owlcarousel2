@@ -21,24 +21,25 @@ class OwlCarousel2Item {
    *
    * @var int
    */
-  private $file_id;
+  private $fileId;
 
   /**
    * The entity id to be presented when user clicks at the banner.
    *
    * @var int
    */
-  private $entity_id;
+  private $entityId;
 
   /**
    * The youtube or vimeo video url.
    *
    * @var string
    */
-  private $video_url;
+  private $videoUrl;
 
   /**
    * The item type.
+   *
    *  - custom: for custom item.
    *  - view: for view item.
    *
@@ -51,10 +52,10 @@ class OwlCarousel2Item {
    *
    * @var string
    */
-  private $view_id;
+  private $viewId;
 
   /**
-   * The item weight
+   * The item weight.
    *
    * @var int
    */
@@ -65,15 +66,21 @@ class OwlCarousel2Item {
    *
    * @var string
    */
-  private $view_mode;
+  private $viewMode;
 
   /**
+   * The image style.
+   *
    * @var string
    */
-  private $image_style;
+  private $imageStyle;
 
-  /** @var  bool */
-  private $display_node_title;
+  /**
+   * Display or not the node title.
+   *
+   * @var bool
+   */
+  private $displayNodeTitle;
 
   /**
    * Get the image_style value.
@@ -82,17 +89,17 @@ class OwlCarousel2Item {
    *   The image_style value.
    */
   public function getImageStyle() {
-    return $this->image_style;
+    return $this->imageStyle;
   }
 
   /**
    * Set the image_style value.
    *
-   * @param string $image_style
+   * @param string $imageStyle
    *   The image_style.
    */
-  public function setImageStyle($image_style) {
-    $this->image_style = $image_style;
+  public function setImageStyle($imageStyle) {
+    $this->imageStyle = $imageStyle;
   }
 
   /**
@@ -102,17 +109,17 @@ class OwlCarousel2Item {
    *   The display_node_title value.
    */
   public function isDisplayNodeTitle() {
-    return $this->display_node_title;
+    return $this->displayNodeTitle;
   }
 
   /**
    * Set the display_node_title value.
    *
-   * @param bool $display_node_title
+   * @param bool $displayNodeTitle
    *   The display_node_title.
    */
-  public function setDisplayNodeTitle($display_node_title) {
-    $this->display_node_title = $display_node_title;
+  public function setDisplayNodeTitle($displayNodeTitle) {
+    $this->displayNodeTitle = $displayNodeTitle;
   }
 
   /**
@@ -122,17 +129,17 @@ class OwlCarousel2Item {
    *   The view_mode value.
    */
   public function getViewMode() {
-    return $this->view_mode;
+    return $this->viewMode;
   }
 
   /**
    * Set the view_mode value.
    *
-   * @param string $view_mode
+   * @param string $viewMode
    *   The view_mode.
    */
-  public function setViewMode($view_mode) {
-    $this->view_mode = $view_mode;
+  public function setViewMode($viewMode) {
+    $this->viewMode = $viewMode;
   }
 
   /**
@@ -172,17 +179,17 @@ class OwlCarousel2Item {
    *   The file_id value.
    */
   public function getFileId() {
-    return $this->file_id;
+    return $this->fileId;
   }
 
   /**
    * Set the file_id value.
    *
-   * @param int $file_id
+   * @param int $fileId
    *   The file_id.
    */
-  public function setFileId($file_id) {
-    $this->file_id = $file_id;
+  public function setFileId($fileId) {
+    $this->fileId = $fileId;
   }
 
   /**
@@ -192,17 +199,17 @@ class OwlCarousel2Item {
    *   The entity_id value.
    */
   public function getEntityId() {
-    return $this->entity_id;
+    return $this->entityId;
   }
 
   /**
    * Set the entity_id value.
    *
-   * @param int $entity_id
+   * @param int $entityId
    *   The entity_id.
    */
-  public function setEntityId($entity_id) {
-    $this->entity_id = $entity_id;
+  public function setEntityId($entityId) {
+    $this->entityId = $entityId;
   }
 
   /**
@@ -212,17 +219,17 @@ class OwlCarousel2Item {
    *   The video_url value.
    */
   public function getVideoUrl() {
-    return $this->video_url;
+    return $this->videoUrl;
   }
 
   /**
    * Set the video_url value.
    *
-   * @param string $video_url
+   * @param string $videoUrl
    *   The video_url.
    */
-  public function setVideoUrl($video_url) {
-    $this->video_url = $video_url;
+  public function setVideoUrl($videoUrl) {
+    $this->videoUrl = $videoUrl;
   }
 
   /**
@@ -252,17 +259,17 @@ class OwlCarousel2Item {
    *   The view_id value.
    */
   public function getViewId() {
-    return $this->view_id;
+    return $this->viewId;
   }
 
   /**
    * Set the view_id value.
    *
-   * @param string $view_id
+   * @param string $viewId
    *   The view_id.
    */
-  public function setViewId($view_id) {
-    $this->view_id = $view_id;
+  public function setViewId($viewId) {
+    $this->viewId = $viewId;
   }
 
   /**
@@ -304,7 +311,6 @@ class OwlCarousel2Item {
     $this->setImageStyle(isset($item_array['image_style']) ? $item_array['image_style'] : NULL);
     $this->setDisplayNodeTitle(isset($item_array['display_node_title']) ? $item_array['display_node_title'] : FALSE);
     $this->setViewId(isset($item_array['view_id']) ? $item_array['view_id'] : NULL);
-
 
     $id = isset($item_array['id']) ? $item_array['id'] : NULL;
 
