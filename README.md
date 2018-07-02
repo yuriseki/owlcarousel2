@@ -1,22 +1,32 @@
-# OwlCarousel2
+OwlCarousel2
+------------
 
-## Introduction
-This module integrates the beautiful carousel slider [Owl Carousel 2](https://owlcarousel2.github.io/OwlCarousel2/) through blocks integrations.
+INTRODUCTION
+-------------
+This module integrates the beautiful carousel slider 
+[Owl Carousel 2](https://owlcarousel2.github.io/OwlCarousel2/) through blocks 
+integrations.
 
 Effects provided by the [Animate.css](https://daneden.github.io/animate.css/)
 
-## Installation
+INSTALLATION
+-------------
 To install OwlCarousel 2 on Drupal, proceed as usual and then download and
  copy the `dist` folder of the OwlCarousel2 v2.3.4 javascript library on 
  `\libraries\OwlCarousel2\dist`.
 
+REQUIREMENTS
+------------
  [OwlCarousel2](https://github.com/OwlCarousel2/OwlCarousel2/archive/2.3.4.zip)
+ library
  
-## Configuration
+CONFIGURATION
+-------------
 After installation, a new tab `Carousel` will be present on `Content` admin 
  menu.
  
-1. On content menu, click on `Carousel` tab, `Add OwlCarousel2` to create a new carousel.
+1. On content menu, click on `Carousel` tab, `Add OwlCarousel2` to create a new
+carousel.
 2. You can fill the carousel Name and configuration on the form or skip it to do
  it later.
 3. Click on `Save`
@@ -37,6 +47,8 @@ new block wherever tou want.
 PS: You can use Display Suite or Page Manager to configure the OwlCarousel2 
 blocks as well.
 
-## Mantainers
+MAINTAINERS
+-----------
 Current maintainers:
-* Yuri Seki (yuriseki) [https://www.drupal.org/user/1523064](https://www.drupal.org/user/1523064)
+* Yuri Seki (yuriseki) 
+[https://www.drupal.org/user/1523064](https://www.drupal.org/user/1523064)
