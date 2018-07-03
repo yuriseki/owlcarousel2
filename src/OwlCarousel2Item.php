@@ -290,7 +290,6 @@ class OwlCarousel2Item {
       'view_mode'          => $this->getViewMode(),
       'image_style'        => $this->getImageStyle(),
       'display_node_title' => $this->isDisplayNodeTitle(),
-      'view_id'            => $this->getViewId(),
     ];
   }
 
@@ -310,7 +309,6 @@ class OwlCarousel2Item {
     $this->setViewMode(isset($item_array['view_mode']) ? $item_array['view_mode'] : NULL);
     $this->setImageStyle(isset($item_array['image_style']) ? $item_array['image_style'] : NULL);
     $this->setDisplayNodeTitle(isset($item_array['display_node_title']) ? $item_array['display_node_title'] : FALSE);
-    $this->setViewId(isset($item_array['view_id']) ? $item_array['view_id'] : NULL);
 
     $id = isset($item_array['id']) ? $item_array['id'] : NULL;
 

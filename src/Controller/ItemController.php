@@ -30,6 +30,13 @@ class ItemController extends ControllerBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static ($container);
+  }
+
+  /**
    * Revmove one item from OwlCarousel2.
    *
    * @param int $owlcarousel2

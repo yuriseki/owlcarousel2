@@ -80,6 +80,38 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['items_per_slide']) ? $settings['items_per_slide'] : 1,
     ];
 
+    $form['settings']['margin'] = [
+      '#type'          => 'number',
+      '#title'         => $this->t('Margin'),
+      '#description'   => $this->t('Margin between items in px.'),
+      '#required'      => TRUE,
+      '#min'           => 0,
+      '#max'           => 1000,
+      '#default_value' => isset($settings['margin']) ? $settings['margin'] : 1,
+    ];
+
+    $form['settings']['stagePadding'] = [
+      '#type'          => 'number',
+      '#title'         => $this->t('Stage Padding'),
+      '#description'   => $this->t('Padding left and right on stage (can see neighbours) px.'),
+      '#required'      => TRUE,
+      '#min'           => 0,
+      '#max'           => 1000,
+      '#default_value' => isset($settings['stagePadding']) ? $settings['stagePadding'] : 0,
+    ];
+
+    $form['settings']['center'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Center item'),
+      '#description'   => $this->t('Works well with even an odd number of items. Make sense only if you are displaying more than 1 item per slide.'),
+      '#required'      => TRUE,
+      '#options'       => [
+        'true'  => $this->t('Yes'),
+        'false' => $this->t('No'),
+      ],
+      '#default_value' => isset($settings['center']) ? $settings['center'] : 'true',
+    ];
+
     $form['settings']['loop'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Loop'),
@@ -148,6 +180,22 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['nav']) ? $settings['nav'] : 'false',
     ];
 
+    $form['settings']['previousText'] = [
+      '#type'          => 'textfield',
+      '#title'         => $this->t('Text to PREVIOUS navigation button'),
+      '#description'   => $this->t('Text to be used on NEXT navigation button default: "<". HTML allowed.'),
+      '#required'      => TRUE,
+      '#default_value' => isset($settings['previousText']) ? $settings['previousText'] : '<',
+    ];
+
+    $form['settings']['nextText'] = [
+      '#type'          => 'textfield',
+      '#title'         => $this->t('Text to NEXT navigation button'),
+      '#description'   => $this->t('Text to be used on NEXT navigation button default: ">". HTML allowed.'),
+      '#required'      => TRUE,
+      '#default_value' => isset($settings['nextText']) ? $settings['nextText'] : '>',
+    ];
+
     $form['settings']['dots'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Show dots navigation'),
@@ -205,6 +253,30 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#description'   => $this->t('The animation to be applied at the item when it goes put. Only works if there is one (1) item per slide.'),
       '#options'       => $effects,
       '#default_value' => isset($settings['animateOut']) ? $settings['animateOut'] : 'false',
+    ];
+
+    $form['settings']['mouseDrag'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Mouse drag enabled'),
+      '#description'   => $this->t('Make slides mouse draggable.'),
+      '#required'      => TRUE,
+      '#options'       => [
+        'true'  => $this->t('Yes'),
+        'false' => $this->t('No'),
+      ],
+      '#default_value' => isset($settings['mouseDrag']) ? $settings['mouseDrag'] : 'true',
+    ];
+
+    $form['settings']['touchDrag'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Touch drag enabled'),
+      '#description'   => $this->t('Make slides touch draggable.'),
+      '#required'      => TRUE,
+      '#options'       => [
+        'true'  => $this->t('Yes'),
+        'false' => $this->t('No'),
+      ],
+      '#default_value' => isset($settings['touchDrag']) ? $settings['touchDrag'] : 'true',
     ];
 
     return $form;
@@ -388,7 +460,7 @@ class OwlCarousel2Form extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    /** @var \Drupal\owlcarousel2\OwlCarouselItem $entity */
+    /** @var \Drupal\owlcarousel2\Entity\OwlCarousel2 $entity */
     $entity = $this->entity;
 
     // Save as a new revision if requested to do so.

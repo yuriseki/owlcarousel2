@@ -11,10 +11,11 @@
           if (keyed_settings.hasOwnProperty(key)) {
             keys.push(key);
             var owl_settings = keyed_settings[key];
+            console.log(keyed_settings);
             $('#owlcarousel2-id-' + key).owlCarousel({
               video: true,
               loop: owl_settings.loop === 'true',
-              margin: 10,
+              margin: parseInt(owl_settings.margin ? owl_settings.margin : 0),
               nav: owl_settings.nav === 'true',
               items: parseInt(owl_settings.items_per_slide),
               autoplay: owl_settings.autoplay === 'true',
@@ -26,7 +27,12 @@
               animateIn: owl_settings.animateIn,
               animateOut: owl_settings.animateOut,
               dotClass: owl_settings.dotClass ? owl_settings.dotClass : 'owl-dot',
-              dotsClass: owl_settings.dotsClass ? owl_settings.dotsClass : 'owl-dots'
+              dotsClass: owl_settings.dotsClass ? owl_settings.dotsClass : 'owl-dots',
+              center: owl_settings.center === 'true',
+              mouseDrag: owl_settings.mouseDrag !== 'false',
+              touchDrag: owl_settings.touchDrag !== 'false',
+              stagePadding: parseInt(owl_settings.stagePadding ? owl_settings.stagePadding : 0),
+              navText: [owl_settings.previousText ? owl_settings.previousText : '<', owl_settings.previousText ? owl_settings.nextText : '>'],
             });
 
             // Video adjust
@@ -56,9 +62,6 @@
               var itemImage = $('#owlcarousel2-id-' + keys[key] + ' .item-image');
               var biggestImageHeight = 0;
 
-              // itemImage.each(function () {
-              //   biggestImageHeight = biggestImageHeight < itemImage.first().height() ? itemImage.first().height() : biggestImageHeight;
-              // });
               for (var item in itemImage) {
                 if (itemImage.hasOwnProperty(item)) {
                   biggestImageHeight = biggestImageHeight < itemImage.first().height() ? itemImage.first().height() : biggestImageHeight;
