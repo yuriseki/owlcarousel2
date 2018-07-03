@@ -11,7 +11,6 @@
           if (keyed_settings.hasOwnProperty(key)) {
             keys.push(key);
             var owl_settings = keyed_settings[key];
-            console.log(keyed_settings);
             $('#owlcarousel2-id-' + key).owlCarousel({
               video: true,
               loop: owl_settings.loop === 'true',
@@ -32,7 +31,7 @@
               mouseDrag: owl_settings.mouseDrag !== 'false',
               touchDrag: owl_settings.touchDrag !== 'false',
               stagePadding: parseInt(owl_settings.stagePadding ? owl_settings.stagePadding : 0),
-              navText: [owl_settings.previousText ? owl_settings.previousText : '<', owl_settings.previousText ? owl_settings.nextText : '>'],
+              navText: [owl_settings.previousText ? owl_settings.previousText : '<', owl_settings.previousText ? owl_settings.nextText : '>']
             });
 
             // Video adjust
