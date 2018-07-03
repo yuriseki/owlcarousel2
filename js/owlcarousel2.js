@@ -46,7 +46,7 @@
         }
 
         $(window).resize(function () {
-          for (key in keys) {
+          for (var key in keys) {
             if (keys.hasOwnProperty(key)) {
               // Adjust video Height
               var videoItem = $('#owlcarousel2-id-' + keys[key] + ' .owl-carousel-video-item');
