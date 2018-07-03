@@ -56,9 +56,14 @@
               var itemImage = $('#owlcarousel2-id-' + keys[key] + ' .item-image');
               var biggestImageHeight = 0;
 
-              itemImage.each(function () {
-                biggestImageHeight = biggestImageHeight < itemImage.first().height() ? itemImage.first().height() : biggestImageHeight;
-              });
+              // itemImage.each(function () {
+              //   biggestImageHeight = biggestImageHeight < itemImage.first().height() ? itemImage.first().height() : biggestImageHeight;
+              // });
+              for (var item in itemImage) {
+                if (itemImage.hasOwnProperty(item)) {
+                  biggestImageHeight = biggestImageHeight < itemImage.first().height() ? itemImage.first().height() : biggestImageHeight;
+                }
+              }
 
               if (biggestImageHeight > 0) {
                 videoHeight = biggestImageHeight;
@@ -67,12 +72,23 @@
                 videoHeight = videoItem.first().width() * (1080 / 1920);
               }
 
-              videoItem.each(function () {
-                $(this).css('height', videoHeight + 'px');
-              });
+              resizeVideo(videoItem, videoHeight);
+
             }
           }
         }).resize();
+
+        /**
+         * Resize the video element.
+         *
+         * @param videoItem
+         * @param videoHeight
+         */
+        function resizeVideo(videoItem, videoHeight) {
+          videoItem.each(function () {
+            $(this).css('height', videoHeight + 'px');
+          });
+        }
 
       });
     }
