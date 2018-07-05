@@ -31,11 +31,11 @@ class AddImageForm extends AddItemForm {
     $form['#title'] = $this->t('Carousel | Add Image');
 
     $form_state->set('owlcarousel2', $owlcarousel2);
+    $carousel = OwlCarousel2::load($owlcarousel2);
 
     // Check if it is an edition.
     if ($item_id) {
-      $carousel = OwlCarousel2::load($owlcarousel2);
-      $item     = $carousel->getItem($item_id);
+      $item = $carousel->getItem($item_id);
 
       $default_file['fids'] = $item['file_id'];
 
@@ -85,6 +85,27 @@ class AddImageForm extends AddItemForm {
       '#required'      => TRUE,
       '#empty_option'  => $this->t('Select'),
       '#default_value' => (isset($item['image_style']) && $item['image_style']) ? $item['image_style'] : 'owlcarousel2',
+    ];
+
+    $form['item_label_type'] = [
+      '#type'        => 'radios',
+      '#title'       => $this->t('Label type'),
+      '#description' => $this->t('If you chose to display text as the navigation links, which label do you want to use?'),
+      '#options'     => [
+        'content_title' => $this->t('Content title'),
+        'custom_title'  => $this->t('Custom title'),
+      ],
+      '#default_value' => (isset($item['item_label_type']) && $item['item_label_type']) ? $item['item_label_type'] : 'content_title',
+    ];
+
+    $form['item_label'] = [
+      '#type'          => 'textfield',
+      '#title'         => $this->t('Item label'),
+      '#description'   => $this->t('Used if you configure the carousel to display text navigation.'),
+      '#default_value' => (isset($item['item_label']) && $item['item_label']) ? $item['item_label'] : '',
+      '#states'        => [
+        'visible' => [':input[name="item_label_type"]' => ['value' => 'custom_title']],
+      ],
     ];
 
     $form['entity_id'] = [
@@ -148,6 +169,8 @@ class AddImageForm extends AddItemForm {
       'view_mode'          => $form_state->getValue('view_mode'),
       'image_style'        => $form_state->getValue('image_style'),
       'display_node_title' => $form_state->getValue('display_node_title'),
+      'item_label'         => $form_state->getValue('item_label'),
+      'item_label_type'    => $form_state->getValue('item_label_type'),
     ];
 
     if ($operation == 'add') {

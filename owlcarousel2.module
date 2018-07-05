@@ -7,10 +7,7 @@
 
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\file\Entity\File;
-use Drupal\node\Entity\Node;
-use Drupal\owlcarousel2\Entity\OwlCarousel2;
-use Drupal\views\Views;
+use Drupal\owlcarousel2\Util;
 
 /**
  * Implements hook_help().
@@ -46,7 +43,7 @@ function owlcarousel2_theme() {
       'base hook' => 'node',
     ],
     'owlcarousel2_block'      => [
-      'variables' => ['content' => NULL, 'id' => NULL],
+      'variables' => ['content' => NULL, 'id' => NULL, 'nav_titles'],
       'template'  => 'block--owlcarousel2',
     ],
   ];
@@ -60,12 +57,15 @@ function owlcarousel2_theme() {
 function owlcarousel2_preprocess_owlcarousel2(&$variables) {
   $elements = $variables['elements'];
   /** @var \Drupal\owlcarousel2\Entity\OwlCarousel2 $carousel */
-  $carousel = $elements['#owlcarousel2'];
-  $content = owlcarousel2_get_carousel($carousel->id());
-  $settings = $carousel->get('settings')->getValue()[0];
+  $carousel   = $elements['#owlcarousel2'];
+  $data       = Util::getCarouselData($carousel->id());
+  $content    = $data['content'];
+  $nav_titles = $data['navigation_titles'];
+  $settings   = $carousel->get('settings')->getValue()[0];
 
   $variables['content']['#markup']     = Markup::create($content);
   $variables['id']                     = $carousel->id();
+  $variables['nav_titles']             = $nav_titles;
   $variables['#attached']['library'][] = 'owlcarousel2/owlcarousel2';
 
   $container = \Drupal::getContainer();
@@ -88,95 +88,4 @@ function owlcarousel2_preprocess_html(&$variables) {
   $key_value = $container->get('keyvalue.expirable');
   $key_value->get('owlcarousel2')->deleteAll();
 
-}
-
-/**
- * Get the OwlCarousel2 rendered string.
- *
- * @param int $owlcarousel_id
- *   The carousel id.
- *
- * @return string
- *   The OwlCarousel HTML.
- */
-function owlcarousel2_get_carousel($owlcarousel_id) {
-  $carousel = OwlCarousel2::load($owlcarousel_id);
-  $items    = $carousel->getItems()[0];
-
-  $content = '';
-  if (count($items)) {
-    foreach ($items as $item) {
-      $item_display = '';
-      if ($item['type'] == 'image') {
-        $file = File::load($item['file_id']);
-        $image = [
-          '#theme'      => 'image_style',
-          '#style_name' => $item['image_style'],
-          '#uri'        => ($file instanceof File) ? $file->getFileUri() : '',
-        ];
-
-        $node = is_null($item['entity_id']) ? FALSE : Node::load($item['entity_id']);
-        if ($node) {
-          // Store title to restore it latter.
-          $title             = $node->getTitle();
-          $node_render_array = ['#theme' => 'owlcarousel2_node'];
-          if (isset($item['display_node_title']) && !$item['display_node_title']) {
-            $node->setTitle('');
-          }
-          $node_render_array += node_view($node, $item['view_mode']);
-        }
-        else {
-          $node_render_array = NULL;
-        }
-
-        $image_item = [
-          '#theme'     => 'owlcarousel2_image_item',
-          'image'      => $image,
-          'node'       => $node_render_array,
-          '#view_mode' => 'carousel',
-        ];
-
-        $content .= render($image_item);
-        if ($node) {
-          // Restore note title.
-          $node->setTitle($title);
-        }
-      }
-      elseif ($item['type'] == 'video') {
-        $video_url    = $item['video_url'];
-        $item_display = '<div class="item-video owl-carousel-video-item"><a class="owl-video" href="' . $video_url . '"></a></div>';
-
-        $content .= $item_display;
-      }
-      elseif ($item['type'] == 'view') {
-        $view_id = explode(':', $item['view_id'])[0];
-        $display = explode(':', $item['view_id'])[1];
-
-        // Execute view.
-        $view = Views::getView($view_id);
-        // TODO implement view args (maybe).
-        // $view->setArguments($args);
-        $view->setDisplay($display);
-        $view->preExecute();
-        $view->build();
-
-        if ($view->execute()) {
-          $view_result = $view->result;
-          /** @var \Drupal\views\ResultRow $resultRow */
-          foreach ($view_result as $resultRow) {
-            /** @var \Drupal\node\Entity\Node $node */
-            $node              = $resultRow->_entity;
-            $node_render_array = ['#theme' => 'owlcarousel2_node'];
-
-            $node_render_array += node_view($node, $item['view_mode']);
-            $content           .= render($node_render_array);
-          }
-
-        }
-      }
-
-    }
-  }
-
-  return $content;
 }

@@ -83,6 +83,65 @@ class OwlCarousel2Item {
   private $displayNodeTitle;
 
   /**
+   * The label to be displayed on navigation.
+   *
+   * Used if the carousel is configured to display text navigation.
+   *
+   * @var string
+   */
+  private $itemLabel;
+
+  /**
+   * Item label type.
+   *
+   * If the carousel is configured to display navigation bullets as text, which
+   * type text should be presented: The content title or a custom one?
+   *
+   * @var string
+   */
+  private $itemLabelType;
+
+  /**
+   * Get the itemLabelType value.
+   *
+   * @return string
+   *   The itemLabelType value.
+   */
+  public function getItemLabelType() {
+    return $this->itemLabelType;
+  }
+
+  /**
+   * Set the itemLabelType value.
+   *
+   * @param string $itemLabelType
+   *   The itemLabelType.
+   */
+  public function setItemLabelType($itemLabelType) {
+    $this->itemLabelType = $itemLabelType;
+  }
+
+  /**
+   * Get the itemLabel value.
+   *
+   * @return string
+   *   The itemLabel value.
+   */
+  public function getItemLabel() {
+    return $this->itemLabel;
+  }
+
+  /**
+   * Set the itemLabel value.
+   *
+   * @param string $itemLabel
+   *   The itemLabel.
+   */
+  public function setItemLabel($itemLabel) {
+    $this->itemLabel = $itemLabel;
+  }
+
+  /**
    * Get the image_style value.
    *
    * @return string
@@ -290,6 +349,8 @@ class OwlCarousel2Item {
       'view_mode'          => $this->getViewMode(),
       'image_style'        => $this->getImageStyle(),
       'display_node_title' => $this->isDisplayNodeTitle(),
+      'item_label'         => $this->getItemLabel(),
+      'item_label_type'    => $this->getItemLabelType(),
     ];
   }
 
@@ -309,6 +370,8 @@ class OwlCarousel2Item {
     $this->setViewMode(isset($item_array['view_mode']) ? $item_array['view_mode'] : NULL);
     $this->setImageStyle(isset($item_array['image_style']) ? $item_array['image_style'] : NULL);
     $this->setDisplayNodeTitle(isset($item_array['display_node_title']) ? $item_array['display_node_title'] : FALSE);
+    $this->setItemLabel(isset($item_array['item_label']) ? $item_array['item_label'] : NULL);
+    $this->setItemLabelType(isset($item_array['item_label_type']) ? $item_array['item_label_type'] : 'content_title');
 
     $id = isset($item_array['id']) ? $item_array['id'] : NULL;
 

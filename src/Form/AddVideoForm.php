@@ -52,6 +52,18 @@ class AddVideoForm extends AddItemForm {
       '#required'      => TRUE,
     ];
 
+    $form['item_label_type'] = [
+      '#type'        => 'value',
+      '#value'       => 'custom_title',
+    ];
+
+    $form['item_label'] = [
+      '#type'          => 'textfield',
+      '#title'         => $this->t('Item label'),
+      '#description'   => $this->t('Used if you configure the carousel to display text navigation.'),
+      '#default_value' => (isset($item['item_label']) && $item['item_label']) ? $item['item_label'] : '',
+    ];
+
     $form += parent::buildForm($form, $form_state, $owlcarousel2, $item_id);
 
     return $form;
@@ -69,6 +81,7 @@ class AddVideoForm extends AddItemForm {
     $item_array = [
       'type'      => 'video',
       'video_url' => $video_url,
+      'item_label' => $form_state->getValue('item_label'),
     ];
 
     if ($operation == 'add') {

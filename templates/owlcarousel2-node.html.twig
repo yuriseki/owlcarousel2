@@ -1,7 +1,7 @@
 {% if content %}
 
   <article{{ attributes.addClass('owlcarousel-node') }}>
-
+    <div data-hash="owl-hash-nid-{{ url|split('/')|last }}">
     {% if label %}
       {{ title_prefix }}
       <h2{{ title_attributes }}>
@@ -13,6 +13,6 @@
     <div{{ content_attributes.addClass('node__content', 'owlcarousel-node-content') }}>
       {{ content }}
     </div>
-
+    </div>
   </article>
 {% endif %}

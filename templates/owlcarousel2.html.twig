@@ -20,3 +20,8 @@
     {{ content }}
   {% endif %}
 </div>
+<div class="owl-text-navigation">
+  {% for item in  nav_titles %}
+    <a class="owl-text-navigation-link" href="#{{ item.id }}">{{ item.title }}</a>
+  {% endfor %}
+</div>

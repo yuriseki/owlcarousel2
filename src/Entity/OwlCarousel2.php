@@ -208,7 +208,7 @@ class OwlCarousel2 extends RevisionableContentEntityBase implements OwlCarousel2
    *   The item to be updated.
    */
   public function updateItem(OwlCarousel2Item $item) {
-    $item = $item->getArray();
+    $item  = $item->getArray();
     $items = $this->getItems();
     foreach ($items[0] as $key => $value) {
       if ($value['id'] == $item['id']) {
@@ -223,26 +223,19 @@ class OwlCarousel2 extends RevisionableContentEntityBase implements OwlCarousel2
    * {@inheritdoc}
    */
   public function getItems() {
-    $map   = $this->get('items');
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+    // Try to load the translated items, otherwise load the default one.
+    try {
+      $map = $this->getTranslation($langcode)->get('items');
+    }
+    catch (\Exception $e) {
+      $map = $this->get('items');
+    }
+
     $items = $map->getValue();
+
     return $items;
-  }
-
-  /**
-   * Add one item in the carousel.
-   *
-   * @param \Drupal\owlcarousel2\OwlCarousel2Item $item
-   *   The item to be added.
-   */
-  public function addItem(OwlCarousel2Item $item) {
-    $items           = $this->getItems();
-    $array           = $item->getArray();
-    $array['weight'] = count($items[0]) + 1;
-    // Because of some weired behavior of MapFieldItemList, need to save all
-    // items on index 0.
-    $items[0][] = $array;
-
-    $this->set('items', $items);
   }
 
   /**
@@ -263,6 +256,23 @@ class OwlCarousel2 extends RevisionableContentEntityBase implements OwlCarousel2
     }
 
     return NULL;
+  }
+
+  /**
+   * Add one item in the carousel.
+   *
+   * @param \Drupal\owlcarousel2\OwlCarousel2Item $item
+   *   The item to be added.
+   */
+  public function addItem(OwlCarousel2Item $item) {
+    $items           = $this->getItems();
+    $array           = $item->getArray();
+    $array['weight'] = count($items[0]) + 1;
+    // Because of some weired behavior of MapFieldItemList, need to save all
+    // items on index 0.
+    $items[0][] = $array;
+
+    $this->set('items', $items);
   }
 
   /**
@@ -372,7 +382,8 @@ class OwlCarousel2 extends RevisionableContentEntityBase implements OwlCarousel2
       ->setLabel(t('Items'))
       ->setDescription(t('The carousel items.'))
       ->setDefaultValue(NULL)
-      ->setRevisionable(TRUE);
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE);
 
     $fields['settings'] = BaseFieldDefinition::create('map')
       ->setLabel(t('Settings'))

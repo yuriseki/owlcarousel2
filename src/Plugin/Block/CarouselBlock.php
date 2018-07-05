@@ -8,6 +8,7 @@ use Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\owlcarousel2\Entity\OwlCarousel2;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\owlcarousel2\Util;
 
 /**
  * Provides a 'CarouselBlock' block.
@@ -95,7 +96,7 @@ class CarouselBlock extends BlockBase implements ContainerFactoryPluginInterface
     }
     $settings = $carousel->get('settings')->getValue()[0];
 
-    $content                         = owlcarousel2_get_carousel($carousel->id());
+    $content                         = Util::getCarouselData($carousel->id());
     $build['#theme']                 = 'owlcarousel2_block';
     $build['#content']['#markup']    = $content;
     $build['#id']                    = 'owlcarousel2-id-' . $carousel->id();
