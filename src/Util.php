@@ -100,6 +100,13 @@ class Util {
           else {
             $node_render_array = NULL;
           }
+
+          $position = [];
+          if (isset($item['content_over_image']) && $item['content_over_image'] === 'true') {
+            $position['content_vertical_position'] = $item['content_vertical_position'];
+            $position['content_horizontal_position'] = $item['content_horizontal_position'];
+          }
+
           $url = $node->toLink()->getUrl()->toString();
           $image_item = [
             '#theme'     => 'owlcarousel2_image_item',
@@ -107,6 +114,7 @@ class Util {
             'node'       => $node_render_array,
             'item_id'    => ['#markup' => $item['id']],
             'url'        => ['#markup' => $url],
+            'position'   => $position,
             '#view_mode' => 'carousel',
           ];
 

@@ -87,27 +87,6 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['image_style']) && $item['image_style']) ? $item['image_style'] : 'owlcarousel2',
     ];
 
-    $form['item_label_type'] = [
-      '#type'        => 'radios',
-      '#title'       => $this->t('Label type'),
-      '#description' => $this->t('If you chose to display text as the navigation links, which label do you want to use?'),
-      '#options'     => [
-        'content_title' => $this->t('Content title'),
-        'custom_title'  => $this->t('Custom title'),
-      ],
-      '#default_value' => (isset($item['item_label_type']) && $item['item_label_type']) ? $item['item_label_type'] : 'content_title',
-    ];
-
-    $form['item_label'] = [
-      '#type'          => 'textfield',
-      '#title'         => $this->t('Item label'),
-      '#description'   => $this->t('Used if you configure the carousel to display text navigation.'),
-      '#default_value' => (isset($item['item_label']) && $item['item_label']) ? $item['item_label'] : '',
-      '#states'        => [
-        'visible' => [':input[name="item_label_type"]' => ['value' => 'custom_title']],
-      ],
-    ];
-
     $form['entity_id'] = [
       '#type'          => 'entity_autocomplete',
       '#title'         => $this->t('Content to link the carousel item'),
@@ -147,6 +126,126 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['view_mode']) && $item['view_mode']) ? $item['view_mode'] : '',
     ];
 
+    $form['advanced'] = [
+      '#type'  => 'details',
+      '#title' => $this->t('Advanced configuration'),
+    ];
+
+    $form['advanced']['item_label_type'] = [
+      '#type'          => 'radios',
+      '#title'         => $this->t('Label type'),
+      '#description'   => $this->t('If you chose to display text as the navigation links, which label do you want to use?'),
+      '#options'       => [
+        'content_title' => $this->t('Content title'),
+        'custom_title'  => $this->t('Custom title'),
+      ],
+      '#default_value' => (isset($item['item_label_type']) && $item['item_label_type']) ? $item['item_label_type'] : 'content_title',
+    ];
+
+    $form['advanced']['item_label'] = [
+      '#type'          => 'textfield',
+      '#title'         => $this->t('Item label'),
+      '#description'   => $this->t('Used if you configure the carousel to display text navigation.'),
+      '#default_value' => (isset($item['item_label']) && $item['item_label']) ? $item['item_label'] : '',
+      '#states'        => [
+        'visible' => [':input[name="item_label_type"]' => ['value' => 'custom_title']],
+      ],
+    ];
+
+    $form['advanced']['content_over_image'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Display content text over image'),
+      '#description'   => $this->t('Select "Yes" if you want to display the content linked to the image over the image.'),
+      '#options'       => [
+        'true'  => $this->t('Yes'),
+        'false' => $this->t('No'),
+      ],
+      '#required'      => TRUE,
+      '#empty_option'  => $this->t('Select'),
+      '#default_value' => (isset($item['content_over_image']) && $item['content_over_image']) ? $item['content_over_image'] : 'false',
+    ];
+
+    $form['advanced']['content_vertical_position'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Content vertical position'),
+      '#description'   => $this->t('Vertical position in where the content will be shown over the image.'),
+      '#options'       => [
+        'vertical-top'   => $this->t('Top'),
+        'vertical-center' => $this->t('Center'),
+        'vertical-bottom'  => $this->t('Bottom'),
+      ],
+      '#required'      => TRUE,
+      '#empty_option'  => $this->t('Select'),
+      '#default_value' => (isset($item['content_vertical_position']) && $item['content_vertical_position']) ? $item['content_vertical_position'] : 'vertical-center',
+    ];
+
+    $form['advanced']['content_horizontal_position'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Content horizontal position'),
+      '#description'   => $this->t('Horizontal position in where the content will be shown over the image.'),
+      '#options'       => [
+        'horizontal-left'   => $this->t('Left'),
+        'horizontal-center' => $this->t('Center'),
+        'horizontal-right'  => $this->t('Right'),
+      ],
+      '#required'      => TRUE,
+      '#empty_option'  => $this->t('Select'),
+      '#default_value' => (isset($item['content_horizontal_position']) && $item['content_horizontal_position']) ? $item['content_horizontal_position'] : 'horizontal-center',
+    ];
+
+    $form['advanced']['content_padding_unit'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Unit to be used in padding'),
+      '#description'   => $this->t('The content can be moved using padding. Select here the unit of measure you want.'),
+      '#options'       => [
+        '%'  => $this->t('%'),
+        'px' => $this->t('Pixels'),
+      ],
+      '#required'      => TRUE,
+      '#empty_option'  => $this->t('Select'),
+      '#default_value' => (isset($item['content_padding_unit']) && $item['content_padding_unit']) ? $item['content_padding_unit'] : '%',
+    ];
+
+    $form['advanced']['content_padding_top'] = [
+      '#type'          => 'number',
+      '#title'         => $this->t('Padding top'),
+      '#required'      => FALSE,
+      '#step'          => .1,
+      '#min'           => 0,
+      '#max'           => 100,
+      '#default_value' => (isset($item['content_padding_top']) && $item['content_padding_top']) ? $item['content_padding_top'] : '',
+    ];
+
+    $form['advanced']['content_padding_bottom'] = [
+      '#type'          => 'number',
+      '#title'         => $this->t('Padding bottom'),
+      '#required'      => FALSE,
+      '#step'          => .1,
+      '#min'           => 0,
+      '#max'           => 100,
+      '#default_value' => (isset($item['content_padding_bottom']) && $item['content_padding_bottom']) ? $item['content_padding_bottom'] : '',
+    ];
+
+    $form['advanced']['content_padding_left'] = [
+      '#type'          => 'number',
+      '#title'         => $this->t('Padding left'),
+      '#required'      => FALSE,
+      '#step'          => .1,
+      '#min'           => 0,
+      '#max'           => 100,
+      '#default_value' => (isset($item['content_padding_left']) && $item['content_padding_left']) ? $item['content_padding_left'] : '',
+    ];
+
+    $form['advanced']['content_padding_right'] = [
+      '#type'          => 'number',
+      '#title'         => $this->t('Padding right'),
+      '#required'      => FALSE,
+      '#step'          => .1,
+      '#min'           => 0,
+      '#max'           => 100,
+      '#default_value' => (isset($item['content_padding_right']) && $item['content_padding_right']) ? $item['content_padding_right'] : '',
+    ];
+
     $form += parent::buildForm($form, $form_state, $owlcarousel2, $item_id);
 
     return $form;
@@ -163,14 +262,22 @@ class AddImageForm extends AddItemForm {
     $carousel        = OwlCarousel2::load($owlcarousel2_id);
 
     $item_array = [
-      'type'               => 'image',
-      'file_id'            => $file_id,
-      'entity_id'          => $entity_id,
-      'view_mode'          => $form_state->getValue('view_mode'),
-      'image_style'        => $form_state->getValue('image_style'),
-      'display_node_title' => $form_state->getValue('display_node_title'),
-      'item_label'         => $form_state->getValue('item_label'),
-      'item_label_type'    => $form_state->getValue('item_label_type'),
+      'type'                        => 'image',
+      'file_id'                     => $file_id,
+      'entity_id'                   => $entity_id,
+      'view_mode'                   => $form_state->getValue('view_mode'),
+      'image_style'                 => $form_state->getValue('image_style'),
+      'display_node_title'          => $form_state->getValue('display_node_title'),
+      'item_label'                  => $form_state->getValue('item_label'),
+      'item_label_type'             => $form_state->getValue('item_label_type'),
+      'content_over_image'          => $form_state->getValue('content_over_image'),
+      'content_vertical_position'   => $form_state->getValue('content_vertical_position'),
+      'content_horizontal_position' => $form_state->getValue('content_horizontal_position'),
+      'content_padding_unit'        => $form_state->getValue('content_padding_unit'),
+      'content_padding_top'         => $form_state->getValue('content_padding_top'),
+      'content_padding_bottom'      => $form_state->getValue('content_padding_bottom'),
+      'content_padding_left'        => $form_state->getValue('content_padding_left'),
+      'content_padding_right'       => $form_state->getValue('content_padding_right'),
     ];
 
     if ($operation == 'add') {

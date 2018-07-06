@@ -1,9 +1,13 @@
 <div>
+  {% set classes = [
+  elements.position.content_vertical_position,
+  elements.position.content_horizontal_position,
+  ] %}
   <a href="{{ elements.url }}">
     <div class="item-image" data-hash="{{ elements.item_id }}">
       <div class="owlcarousel2-node-wrapper">
         <div>{{ elements.image }}</div>
-        <div class="owlcarousel2-node-inner">
+        <div class="owlcarousel2-node-inner {{ classes|join(' ') }}">
           {{ elements.node }}
         </div>
       </div>

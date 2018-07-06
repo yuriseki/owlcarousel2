@@ -43,7 +43,7 @@ function owlcarousel2_theme() {
       'base hook' => 'node',
     ],
     'owlcarousel2_block'      => [
-      'variables' => ['content' => NULL, 'id' => NULL, 'nav_titles'],
+      'variables' => ['content' => NULL, 'id' => NULL, 'nav_titles' => NULL],
       'template'  => 'block--owlcarousel2',
     ],
   ];
