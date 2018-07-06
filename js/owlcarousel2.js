@@ -58,7 +58,7 @@
               var videoHeight = 0;
 
               // Check if there is also an image in carousel.
-              var itemImage = $('#owlcarousel2-id-' + keys[key] + ' .item-image');
+              var itemImage = $('#owlcarousel2-id-' + keys[key] + ' .owlcarousel2-item-image');
               var biggestImageHeight = 0;
 
               for (var item in itemImage) {
@@ -100,6 +100,27 @@
           $(this).css('right', this.getAttribute('data-owl-right'));
           $(this).css('bottom', this.getAttribute('data-owl-bottom'));
           $(this).css('left', this.getAttribute('data-owl-left'));
+        });
+
+        /**
+         * Apply title color.
+         */
+        $('.owlcarousel-node-title-link').each(function () {
+          $(this).css('color', this.getAttribute('data-owl-title-color'))
+        });
+
+        /**
+         * Apply content color.
+         */
+        $('.owlcarousel-node-content').each(function () {
+          $(this).css('color', this.getAttribute('data-owl-content-color'))
+        });
+
+        /**
+         * Apply content background color.
+         */
+        $('.owlcarousel-node-box').each(function () {
+          $(this).css('background-color', this.getAttribute('data-owl-background-color'))
         });
 
       });

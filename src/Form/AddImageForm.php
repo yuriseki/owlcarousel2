@@ -170,9 +170,9 @@ class AddImageForm extends AddItemForm {
       '#title'         => $this->t('Content vertical position'),
       '#description'   => $this->t('Vertical position in where the content will be shown over the image.'),
       '#options'       => [
-        'vertical-top'   => $this->t('Top'),
+        'vertical-top'    => $this->t('Top'),
         'vertical-center' => $this->t('Center'),
-        'vertical-bottom'  => $this->t('Bottom'),
+        'vertical-bottom' => $this->t('Bottom'),
       ],
       '#required'      => TRUE,
       '#empty_option'  => $this->t('Select'),
@@ -246,6 +246,30 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['content_position_right']) && $item['content_position_right']) ? $item['content_position_right'] : '',
     ];
 
+    $form['advanced']['title_color'] = [
+      '#type'          => 'textfield',
+      '#title'         => $this->t('Title text custom color'),
+      '#description'   => $this->t('The note title text color, you can use hexadecimal value as #FFFFFF or rgba(0,0,0,1) for opacity. The last number in rgba is the opacity. Ex. 1 for 100% opaque, 0.5 for 50% opaque/transparent and so on.'),
+      '#required'      => FALSE,
+      '#default_value' => (isset($item['title_color']) && $item['title_color']) ? $item['title_color'] : '',
+    ];
+
+    $form['advanced']['content_color'] = [
+      '#type'          => 'textfield',
+      '#title'         => $this->t('Content text custom color'),
+      '#description'   => $this->t('The note content text color, you can use hexadecimal value as #FFFFFF or rgba(0,0,0,1) for opacity. The last number in rgba is the opacity. Ex. 1 for 100% opaque, 0.5 for 50% opaque/transparent and so on.'),
+      '#required'      => FALSE,
+      '#default_value' => (isset($item['content_color']) && $item['content_color']) ? $item['content_color'] : '',
+    ];
+
+    $form['advanced']['background_color'] = [
+      '#type'          => 'textfield',
+      '#title'         => $this->t('Content background custom color'),
+      '#description'   => $this->t('The note content background color, you can use hexadecimal value as #FFFFFF or rgba(0,0,0,1) for opacity. The last number in rgba is the opacity. Ex. 1 for 100% opaque, 0.5 for 50% opaque/transparent and so on.'),
+      '#required'      => FALSE,
+      '#default_value' => (isset($item['background_color']) && $item['background_color']) ? $item['background_color'] : '',
+    ];
+
     $form += parent::buildForm($form, $form_state, $owlcarousel2, $item_id);
 
     return $form;
@@ -273,11 +297,14 @@ class AddImageForm extends AddItemForm {
       'content_over_image'          => $form_state->getValue('content_over_image'),
       'content_vertical_position'   => $form_state->getValue('content_vertical_position'),
       'content_horizontal_position' => $form_state->getValue('content_horizontal_position'),
-      'content_position_unit'        => $form_state->getValue('content_position_unit'),
-      'content_position_top'         => $form_state->getValue('content_position_top'),
-      'content_position_bottom'      => $form_state->getValue('content_position_bottom'),
-      'content_position_left'        => $form_state->getValue('content_position_left'),
-      'content_position_right'       => $form_state->getValue('content_position_right'),
+      'content_position_unit'       => $form_state->getValue('content_position_unit'),
+      'content_position_top'        => $form_state->getValue('content_position_top'),
+      'content_position_bottom'     => $form_state->getValue('content_position_bottom'),
+      'content_position_left'       => $form_state->getValue('content_position_left'),
+      'content_position_right'      => $form_state->getValue('content_position_right'),
+      'title_color'                 => $form_state->getValue('title_color'),
+      'content_color'               => $form_state->getValue('content_color'),
+      'background_color'            => $form_state->getValue('background_color'),
     ];
 
     if ($operation == 'add') {

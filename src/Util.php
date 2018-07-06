@@ -155,6 +155,10 @@ class Util {
     $bottom = isset($item['content_position_bottom']) && $item['content_position_bottom'] ? $item['content_position_bottom'] . $item['content_position_unit'] : '';
     $left   = isset($item['content_position_left']) && $item['content_position_left'] ? $item['content_position_left'] . $item['content_position_unit'] : '';
 
+    $node_render_array['#attributes']['title_color']      = isset($item['title_color']) ? $item['title_color'] : '';
+    $node_render_array['#attributes']['content_color']    = isset($item['content_color']) ? $item['content_color'] : '';
+    $node_render_array['#attributes']['background_color'] = isset($item['background_color']) ? $item['background_color'] : '';
+
     $image_item = [
       '#theme'     => 'owlcarousel2_image_item',
       'image'      => $image,

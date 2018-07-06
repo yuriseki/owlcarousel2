@@ -158,6 +158,87 @@ class OwlCarousel2Item {
   private $contentPositionRight;
 
   /**
+   * The title color.
+   *
+   * @var string
+   */
+  private $titleColor;
+
+  /**
+   * The content color.
+   *
+   * @var string
+   */
+  private $contentColor;
+
+  /**
+   * The content background color.
+   *
+   * @var string
+   */
+  private $backgroundColor;
+
+  /**
+   * Get the titleColor value.
+   *
+   * @return string
+   *   The titleColor value.
+   */
+  public function getTitleColor(): string {
+    return $this->titleColor;
+  }
+
+  /**
+   * Set the titleColor value.
+   *
+   * @param string $titleColor
+   *   The titleColor.
+   */
+  public function setTitleColor($titleColor) {
+    $this->titleColor = $titleColor;
+  }
+
+  /**
+   * Get the contentColor value.
+   *
+   * @return string
+   *   The contentColor value.
+   */
+  public function getContentColor() {
+    return $this->contentColor;
+  }
+
+  /**
+   * Set the contentColor value.
+   *
+   * @param string $contentColor
+   *   The contentColor.
+   */
+  public function setContentColor($contentColor) {
+    $this->contentColor = $contentColor;
+  }
+
+  /**
+   * Get the backgroundColor value.
+   *
+   * @return string
+   *   The backgroundColor value.
+   */
+  public function getBackgroundColor() {
+    return $this->backgroundColor;
+  }
+
+  /**
+   * Set the backgroundColor value.
+   *
+   * @param string $backgroundColor
+   *   The backgroundColor.
+   */
+  public function setBackgroundColor($backgroundColor) {
+    $this->backgroundColor = $backgroundColor;
+  }
+
+  /**
    * Get the contentOverImage value.
    *
    * @return bool
@@ -570,11 +651,14 @@ class OwlCarousel2Item {
       'content_over_image'          => $this->isContentOverImage(),
       'content_vertical_position'   => $this->getContentVerticalPosition(),
       'content_horizontal_position' => $this->getContentHorizontalPosition(),
-      'content_position_unit'        => $this->getContentPositionUnit(),
-      'content_position_top'         => $this->getContentPositionTop(),
-      'content_position_bottom'      => $this->getContentPositionBottom(),
-      'content_position_left'        => $this->getContentPositionLeft(),
-      'content_position_right'       => $this->getContentPositionRight(),
+      'content_position_unit'       => $this->getContentPositionUnit(),
+      'content_position_top'        => $this->getContentPositionTop(),
+      'content_position_bottom'     => $this->getContentPositionBottom(),
+      'content_position_left'       => $this->getContentPositionLeft(),
+      'content_position_right'      => $this->getContentPositionRight(),
+      'title_color'                 => $this->getTitleColor(),
+      'content_color'               => $this->getContentColor(),
+      'background_color'            => $this->getBackgroundColor(),
     ];
   }
 
@@ -604,6 +688,9 @@ class OwlCarousel2Item {
     $this->setContentPositionBottom(isset($item_array['content_position_bottom']) ? $item_array['content_position_bottom'] : '');
     $this->setContentPositionLeft(isset($item_array['content_position_left']) ? $item_array['content_position_left'] : '');
     $this->setContentPositionRight(isset($item_array['content_position_right']) ? $item_array['content_position_right'] : '');
+    $this->setTitleColor(isset($item_array['title_color']) ? $item_array['title_color'] : '');
+    $this->setContentColor(isset($item_array['content_color']) ? $item_array['content_color'] : '');
+    $this->setBackgroundColor(isset($item_array['background_color']) ? $item_array['background_color'] : '');
 
     $id = isset($item_array['id']) ? $item_array['id'] : NULL;
 
