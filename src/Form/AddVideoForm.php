@@ -52,11 +52,6 @@ class AddVideoForm extends AddItemForm {
       '#required'      => TRUE,
     ];
 
-    $form['item_label_type'] = [
-      '#type'        => 'value',
-      '#value'       => 'custom_title',
-    ];
-
     $form['item_label'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Item label'),
@@ -81,6 +76,7 @@ class AddVideoForm extends AddItemForm {
     $item_array = [
       'type'      => 'video',
       'video_url' => $video_url,
+      'item_label_type' => 'custom_title',
       'item_label' => $form_state->getValue('item_label'),
     ];
 
