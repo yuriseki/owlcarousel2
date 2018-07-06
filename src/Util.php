@@ -67,7 +67,7 @@ class Util {
     $isTextNavigation = (isset($settings['textNavigation']) && $settings['textNavigation'] == 'true') ? TRUE : FALSE;
     $content = '';
     if (count($items)) {
-      foreach ($items as $key => $item) {
+      foreach ($items as $item) {
         $item_display = '';
         if ($item['type'] == 'image') {
           $file = File::load($item['file_id']);
