@@ -1,39 +1,35 @@
-/* Apply the styles bellow if you want the text appearing in the middle if the
- image*/
 .owlcarousel2-node-wrapper {
   position: relative;
 }
 
-.owlcarousel2-node-inner.vertical-center {
+.owlcarousel2-node-inner.content-over-image {
   position: absolute;
+}
+
+.owlcarousel2-node-inner.vertical-center {
   width: 100%;
   top: 50%;
   bottom: 50%;
 }
 
 .owlcarousel2-node-inner.vertical-top {
-  position: absolute;
   width: 100%;
   top: 0;
 }
 
 .owlcarousel2-node-inner.vertical-bottom {
-  position: absolute;
   width: 100%;
   bottom: 0;
 }
 
 .owlcarousel2-node-inner.horizontal-center {
-  position: absolute;
   text-align: center;
 }
 
 .owlcarousel2-node-inner.horizontal-left {
-  position: absolute;
   text-align: left;
 }
 
 .owlcarousel2-node-inner.horizontal-right {
-  position: absolute;
   text-align: right;
 }

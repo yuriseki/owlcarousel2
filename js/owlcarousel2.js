@@ -92,6 +92,16 @@
           });
         }
 
+        /**
+         * Apply inner node position.
+         */
+        $('.owlcarousel2-node-inner').each(function () {
+          $(this).css('top', this.getAttribute('data-owl-top'));
+          $(this).css('right', this.getAttribute('data-owl-right'));
+          $(this).css('bottom', this.getAttribute('data-owl-bottom'));
+          $(this).css('left', this.getAttribute('data-owl-left'));
+        });
+
       });
     }
   };

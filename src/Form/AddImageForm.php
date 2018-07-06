@@ -176,7 +176,7 @@ class AddImageForm extends AddItemForm {
       ],
       '#required'      => TRUE,
       '#empty_option'  => $this->t('Select'),
-      '#default_value' => (isset($item['content_vertical_position']) && $item['content_vertical_position']) ? $item['content_vertical_position'] : 'vertical-center',
+      '#default_value' => (isset($item['content_vertical_position']) && $item['content_vertical_position']) ? $item['content_vertical_position'] : 'vertical-bottom',
     ];
 
     $form['advanced']['content_horizontal_position'] = [
@@ -190,60 +190,60 @@ class AddImageForm extends AddItemForm {
       ],
       '#required'      => TRUE,
       '#empty_option'  => $this->t('Select'),
-      '#default_value' => (isset($item['content_horizontal_position']) && $item['content_horizontal_position']) ? $item['content_horizontal_position'] : 'horizontal-center',
+      '#default_value' => (isset($item['content_horizontal_position']) && $item['content_horizontal_position']) ? $item['content_horizontal_position'] : 'horizontal-left',
     ];
 
-    $form['advanced']['content_padding_unit'] = [
+    $form['advanced']['content_position_unit'] = [
       '#type'          => 'select',
-      '#title'         => $this->t('Unit to be used in padding'),
-      '#description'   => $this->t('The content can be moved using padding. Select here the unit of measure you want.'),
+      '#title'         => $this->t('Unit to be used in position'),
+      '#description'   => $this->t('The content can be moved using position. Select here the unit of measure you want.'),
       '#options'       => [
         '%'  => $this->t('%'),
         'px' => $this->t('Pixels'),
       ],
       '#required'      => TRUE,
       '#empty_option'  => $this->t('Select'),
-      '#default_value' => (isset($item['content_padding_unit']) && $item['content_padding_unit']) ? $item['content_padding_unit'] : '%',
+      '#default_value' => (isset($item['content_position_unit']) && $item['content_position_unit']) ? $item['content_position_unit'] : '%',
     ];
 
-    $form['advanced']['content_padding_top'] = [
+    $form['advanced']['content_position_top'] = [
       '#type'          => 'number',
-      '#title'         => $this->t('Padding top'),
+      '#title'         => $this->t('Position top'),
       '#required'      => FALSE,
       '#step'          => .1,
       '#min'           => 0,
       '#max'           => 100,
-      '#default_value' => (isset($item['content_padding_top']) && $item['content_padding_top']) ? $item['content_padding_top'] : '',
+      '#default_value' => (isset($item['content_position_top']) && $item['content_position_top']) ? $item['content_position_top'] : '',
     ];
 
-    $form['advanced']['content_padding_bottom'] = [
+    $form['advanced']['content_position_bottom'] = [
       '#type'          => 'number',
-      '#title'         => $this->t('Padding bottom'),
+      '#title'         => $this->t('Position bottom'),
       '#required'      => FALSE,
       '#step'          => .1,
       '#min'           => 0,
       '#max'           => 100,
-      '#default_value' => (isset($item['content_padding_bottom']) && $item['content_padding_bottom']) ? $item['content_padding_bottom'] : '',
+      '#default_value' => (isset($item['content_position_bottom']) && $item['content_position_bottom']) ? $item['content_position_bottom'] : '',
     ];
 
-    $form['advanced']['content_padding_left'] = [
+    $form['advanced']['content_position_left'] = [
       '#type'          => 'number',
-      '#title'         => $this->t('Padding left'),
+      '#title'         => $this->t('Position left'),
       '#required'      => FALSE,
       '#step'          => .1,
       '#min'           => 0,
       '#max'           => 100,
-      '#default_value' => (isset($item['content_padding_left']) && $item['content_padding_left']) ? $item['content_padding_left'] : '',
+      '#default_value' => (isset($item['content_position_left']) && $item['content_position_left']) ? $item['content_position_left'] : '',
     ];
 
-    $form['advanced']['content_padding_right'] = [
+    $form['advanced']['content_position_right'] = [
       '#type'          => 'number',
-      '#title'         => $this->t('Padding right'),
+      '#title'         => $this->t('Position right'),
       '#required'      => FALSE,
       '#step'          => .1,
       '#min'           => 0,
       '#max'           => 100,
-      '#default_value' => (isset($item['content_padding_right']) && $item['content_padding_right']) ? $item['content_padding_right'] : '',
+      '#default_value' => (isset($item['content_position_right']) && $item['content_position_right']) ? $item['content_position_right'] : '',
     ];
 
     $form += parent::buildForm($form, $form_state, $owlcarousel2, $item_id);
@@ -273,11 +273,11 @@ class AddImageForm extends AddItemForm {
       'content_over_image'          => $form_state->getValue('content_over_image'),
       'content_vertical_position'   => $form_state->getValue('content_vertical_position'),
       'content_horizontal_position' => $form_state->getValue('content_horizontal_position'),
-      'content_padding_unit'        => $form_state->getValue('content_padding_unit'),
-      'content_padding_top'         => $form_state->getValue('content_padding_top'),
-      'content_padding_bottom'      => $form_state->getValue('content_padding_bottom'),
-      'content_padding_left'        => $form_state->getValue('content_padding_left'),
-      'content_padding_right'       => $form_state->getValue('content_padding_right'),
+      'content_position_unit'        => $form_state->getValue('content_position_unit'),
+      'content_position_top'         => $form_state->getValue('content_position_top'),
+      'content_position_bottom'      => $form_state->getValue('content_position_bottom'),
+      'content_position_left'        => $form_state->getValue('content_position_left'),
+      'content_position_right'       => $form_state->getValue('content_position_right'),
     ];
 
     if ($operation == 'add') {

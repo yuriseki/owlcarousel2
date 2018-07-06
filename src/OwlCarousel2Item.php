@@ -123,39 +123,39 @@ class OwlCarousel2Item {
   private $contentHorizontalPosition;
 
   /**
-   * The node content padding unit.
+   * The node content position unit.
    *
    * @var string
    */
-  private $contentPaddingUnit;
+  private $contentPositionUnit;
 
   /**
-   * The node content padding top.
+   * The node content position top.
    *
    * @var double
    */
-  private $contentPaddingTop;
+  private $contentPositionTop;
 
   /**
-   * The node content padding bottom.
+   * The node content position bottom.
    *
    * @var double
    */
-  private $contentPaddingBottom;
+  private $contentPositionBottom;
 
   /**
-   * The node content padding left.
+   * The node content position left.
    *
    * @var double
    */
-  private $contentPaddingLeft;
+  private $contentPositionLeft;
 
   /**
-   * The node content padding right.
+   * The node content position right.
    *
    * @var double
    */
-  private $contentPaddingRight;
+  private $contentPositionRight;
 
   /**
    * Get the contentOverImage value.
@@ -218,103 +218,103 @@ class OwlCarousel2Item {
   }
 
   /**
-   * Get the contentPaddingUnit value.
+   * Get the contentPositionUnit value.
    *
    * @return string
-   *   The contentPaddingUnit value.
+   *   The contentPositionUnit value.
    */
-  public function getContentPaddingUnit() {
-    return $this->contentPaddingUnit;
+  public function getContentPositionUnit() {
+    return $this->contentPositionUnit;
   }
 
   /**
-   * Set the contentPaddingUnit value.
+   * Set the contentPositionUnit value.
    *
-   * @param string $contentPaddingUnit
-   *   The contentPaddingUnit.
+   * @param string $contentPositionUnit
+   *   The contentPositionUnit.
    */
-  public function setContentPaddingUnit($contentPaddingUnit) {
-    $this->contentPaddingUnit = $contentPaddingUnit;
+  public function setContentPositionUnit($contentPositionUnit) {
+    $this->contentPositionUnit = $contentPositionUnit;
   }
 
   /**
-   * Get the contentPaddingTop value.
-   *
-   * @return float
-   *   The contentPaddingTop value.
-   */
-  public function getContentPaddingTop() {
-    return $this->contentPaddingTop;
-  }
-
-  /**
-   * Set the contentPaddingTop value.
-   *
-   * @param float $contentPaddingTop
-   *   The contentPaddingTop.
-   */
-  public function setContentPaddingTop($contentPaddingTop) {
-    $this->contentPaddingTop = $contentPaddingTop;
-  }
-
-  /**
-   * Get the contentPaddingBottom value.
+   * Get the contentPositionTop value.
    *
    * @return float
-   *   The contentPaddingBottom value.
+   *   The contentPositionTop value.
    */
-  public function getContentPaddingBottom() {
-    return $this->contentPaddingBottom;
+  public function getContentPositionTop() {
+    return $this->contentPositionTop;
   }
 
   /**
-   * Set the contentPaddingBottom value.
+   * Set the contentPositionTop value.
    *
-   * @param float $contentPaddingBottom
-   *   The contentPaddingBottom.
+   * @param float $contentPositionTop
+   *   The contentPositionTop.
    */
-  public function setContentPaddingBottom($contentPaddingBottom) {
-    $this->contentPaddingBottom = $contentPaddingBottom;
+  public function setContentPositionTop($contentPositionTop) {
+    $this->contentPositionTop = $contentPositionTop;
   }
 
   /**
-   * Get the contentPaddingLeft value.
-   *
-   * @return float
-   *   The contentPaddingLeft value.
-   */
-  public function getContentPaddingLeft() {
-    return $this->contentPaddingLeft;
-  }
-
-  /**
-   * Set the contentPaddingLeft value.
-   *
-   * @param float $contentPaddingLeft
-   *   The contentPaddingLeft.
-   */
-  public function setContentPaddingLeft($contentPaddingLeft) {
-    $this->contentPaddingLeft = $contentPaddingLeft;
-  }
-
-  /**
-   * Get the contentPaddingRight value.
+   * Get the contentPositionBottom value.
    *
    * @return float
-   *   The contentPaddingRight value.
+   *   The contentPositionBottom value.
    */
-  public function getContentPaddingRight() {
-    return $this->contentPaddingRight;
+  public function getContentPositionBottom() {
+    return $this->contentPositionBottom;
   }
 
   /**
-   * Set the contentPaddingRight value.
+   * Set the contentPositionBottom value.
    *
-   * @param float $contentPaddingRight
-   *   The contentPaddingRight.
+   * @param float $contentPositionBottom
+   *   The contentPositionBottom.
    */
-  public function setContentPaddingRight($contentPaddingRight) {
-    $this->contentPaddingRight = $contentPaddingRight;
+  public function setContentPositionBottom($contentPositionBottom) {
+    $this->contentPositionBottom = $contentPositionBottom;
+  }
+
+  /**
+   * Get the contentPositionLeft value.
+   *
+   * @return float
+   *   The contentPositionLeft value.
+   */
+  public function getContentPositionLeft() {
+    return $this->contentPositionLeft;
+  }
+
+  /**
+   * Set the contentPositionLeft value.
+   *
+   * @param float $contentPositionLeft
+   *   The contentPositionLeft.
+   */
+  public function setContentPositionLeft($contentPositionLeft) {
+    $this->contentPositionLeft = $contentPositionLeft;
+  }
+
+  /**
+   * Get the contentPositionRight value.
+   *
+   * @return float
+   *   The contentPositionRight value.
+   */
+  public function getContentPositionRight() {
+    return $this->contentPositionRight;
+  }
+
+  /**
+   * Set the contentPositionRight value.
+   *
+   * @param float $contentPositionRight
+   *   The contentPositionRight.
+   */
+  public function setContentPositionRight($contentPositionRight) {
+    $this->contentPositionRight = $contentPositionRight;
   }
 
   /**
@@ -570,11 +570,11 @@ class OwlCarousel2Item {
       'content_over_image'          => $this->isContentOverImage(),
       'content_vertical_position'   => $this->getContentVerticalPosition(),
       'content_horizontal_position' => $this->getContentHorizontalPosition(),
-      'content_padding_unit'        => $this->getContentPaddingUnit(),
-      'content_padding_top'         => $this->getContentPaddingTop(),
-      'content_padding_bottom'      => $this->getContentPaddingBottom(),
-      'content_padding_left'        => $this->getContentPaddingLeft(),
-      'content_padding_right'       => $this->getContentPaddingRight(),
+      'content_position_unit'        => $this->getContentPositionUnit(),
+      'content_position_top'         => $this->getContentPositionTop(),
+      'content_position_bottom'      => $this->getContentPositionBottom(),
+      'content_position_left'        => $this->getContentPositionLeft(),
+      'content_position_right'       => $this->getContentPositionRight(),
     ];
   }
 
@@ -599,11 +599,11 @@ class OwlCarousel2Item {
     $this->setContentOverImage(isset($item_array['content_over_image']) ? $item_array['content_over_image'] : FALSE);
     $this->setContentVerticalPosition(isset($item_array['content_vertical_position']) ? $item_array['content_vertical_position'] : '');
     $this->setContentHorizontalPosition(isset($item_array['content_horizontal_position']) ? $item_array['content_horizontal_position'] : '');
-    $this->setContentPaddingUnit(isset($item_array['content_padding_unit']) ? $item_array['content_padding_unit'] : '');
-    $this->setContentPaddingTop(isset($item_array['content_padding_top']) ? $item_array['content_padding_top'] : '');
-    $this->setContentPaddingBottom(isset($item_array['content_padding_bottom']) ? $item_array['content_padding_bottom'] : '');
-    $this->setContentPaddingLeft(isset($item_array['content_padding_left']) ? $item_array['content_padding_left'] : '');
-    $this->setContentPaddingRight(isset($item_array['content_padding_right']) ? $item_array['content_padding_right'] : '');
+    $this->setContentPositionUnit(isset($item_array['content_position_unit']) ? $item_array['content_position_unit'] : '');
+    $this->setContentPositionTop(isset($item_array['content_position_top']) ? $item_array['content_position_top'] : '');
+    $this->setContentPositionBottom(isset($item_array['content_position_bottom']) ? $item_array['content_position_bottom'] : '');
+    $this->setContentPositionLeft(isset($item_array['content_position_left']) ? $item_array['content_position_left'] : '');
+    $this->setContentPositionRight(isset($item_array['content_position_right']) ? $item_array['content_position_right'] : '');
 
     $id = isset($item_array['id']) ? $item_array['id'] : NULL;
 
