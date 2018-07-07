@@ -137,9 +137,11 @@ class Util {
         $node->setTitle('');
       }
       $node_render_array += node_view($node, $item['view_mode']);
+      $url                = $node->toLink()->getUrl()->toString();
     }
     else {
       $node_render_array = NULL;
+      $url               = '';
     }
 
     $position = [];
@@ -149,7 +151,6 @@ class Util {
       $position['content_over_image']          = 'content-over-image';
     }
 
-    $url    = $node->toLink()->getUrl()->toString();
     $top    = isset($item['content_position_top']) && $item['content_position_top'] ? $item['content_position_top'] . $item['content_position_unit'] : '';
     $right  = isset($item['content_position_right']) && $item['content_position_right'] ? $item['content_position_right'] . $item['content_position_unit'] : '';
     $bottom = isset($item['content_position_bottom']) && $item['content_position_bottom'] ? $item['content_position_bottom'] . $item['content_position_unit'] : '';
