@@ -32,7 +32,7 @@
     {{ content }}
   {% endif %}
 </selction>
-<div class="owl-text-navigation">
+<div id="owl-text-navigation-{{ id }}" class="owl-text-navigation">
   {% for item in  nav_titles %}
     <a class="owl-text-navigation-link" href="#{{ item.id }}">{{ item.title }}</a>
   {% endfor %}
