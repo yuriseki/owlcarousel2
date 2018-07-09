@@ -23,10 +23,18 @@ class ItemController extends ControllerBase {
   protected $fileStorage;
 
   /**
+   * The fileUsage.
+   *
+   * @var \Drupal\file\FileUsage\FileUsageInterface
+   */
+  protected $fileUsage;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(ContainerInterface $container) {
     $this->fileStorage = $container->get('entity_type.manager')->getStorage('file');
+    $this->fileUsage = $container->get('file.usage');
   }
 
   /**
@@ -54,10 +62,15 @@ class ItemController extends ControllerBase {
       if ($value['id'] == $item_id) {
         unset($items[0][$key]);
 
-        // Delete the image file.
+        // Remove carousel usage from the file.
         if (isset($value['file_id'])) {
           $file = $this->fileStorage->load($value['file_id']);
-          $file->delete();
+          $this->fileUsage->delete($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+
+          $usage = $this->fileUsage->listUsage($file);
+          if (count($usage) == 0) {
+            $file->delete();
+          }
         }
         break;
       }

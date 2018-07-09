@@ -2,6 +2,7 @@
 
 namespace Drupal\owlcarousel2;
 
+use Drupal\Core\Render\Markup;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 use Drupal\owlcarousel2\Entity\OwlCarousel2;
@@ -163,7 +164,6 @@ class Util {
     $image_item = [
       '#theme'     => 'owlcarousel2_image_item',
       'image'      => $image,
-      'node'       => $node_render_array,
       'item_id'    => ['#markup' => $item['id']],
       'url'        => ['#markup' => $url],
       'top'        => ['#markup' => $top],
@@ -173,6 +173,16 @@ class Util {
       'position'   => $position,
       '#view_mode' => 'carousel',
     ];
+
+    if (isset($item['text_to_display']) && $item['text_to_display'] === 'custom_text') {
+      $image_item['node'] = [
+        '#theme'      => 'owlcarousel2_custom_text',
+        'custom_text' => ['#markup' => Markup::create($item['custom_text'])],
+      ];
+    }
+    else {
+      $image_item['node'] = $node_render_array;
+    }
 
     $content .= render($image_item);
     if ($node) {

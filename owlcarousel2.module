@@ -38,6 +38,9 @@ function owlcarousel2_theme() {
     'owlcarousel2_image_item' => [
       'render element' => 'elements',
     ],
+    'owlcarousel2_custom_text' => [
+      'render element' => 'elements',
+    ],
     'owlcarousel2_node'       => [
       'template'  => 'owlcarousel2-node',
       'base hook' => 'node',

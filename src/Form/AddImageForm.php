@@ -87,7 +87,17 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['image_style']) && $item['image_style']) ? $item['image_style'] : 'owlcarousel2',
     ];
 
-    $form['entity_id'] = [
+    $form['advanced'] = [
+      '#type'  => 'details',
+      '#title' => $this->t('Advanced configuration'),
+    ];
+
+    $form['advanced']['entity_configuration'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Entity link configuration'),
+    ];
+
+    $form['advanced']['entity_configuration']['entity_id'] = [
       '#type'          => 'entity_autocomplete',
       '#title'         => $this->t('Content to link the carousel item'),
       '#description'   => $this->t('The content to be displayed when the user clicks on the carousel image. Leave empty to not link to anything.'),
@@ -96,7 +106,7 @@ class AddImageForm extends AddItemForm {
       '#target_type'   => 'node',
     ];
 
-    $form['display_node_title'] = [
+    $form['advanced']['entity_configuration']['display_node_title'] = [
       '#type'          => 'checkbox',
       '#title'         => $this->t('Display node title'),
       '#description'   => $this->t('Check if you whant to display the node title on the carousel slide.'),
@@ -116,7 +126,7 @@ class AddImageForm extends AddItemForm {
       }
     }
 
-    $form['view_mode'] = [
+    $form['advanced']['entity_configuration']['view_mode'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Node view mode'),
       '#description'   => $this->t('The node view mode to be displayed with the image.'),
@@ -126,12 +136,7 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['view_mode']) && $item['view_mode']) ? $item['view_mode'] : '',
     ];
 
-    $form['advanced'] = [
-      '#type'  => 'details',
-      '#title' => $this->t('Advanced configuration'),
-    ];
-
-    $form['advanced']['item_label_type'] = [
+    $form['advanced']['entity_configuration']['item_label_type'] = [
       '#type'          => 'radios',
       '#title'         => $this->t('Label type'),
       '#description'   => $this->t('If you chose to display text as the navigation links, which label do you want to use?'),
@@ -142,7 +147,7 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['item_label_type']) && $item['item_label_type']) ? $item['item_label_type'] : 'content_title',
     ];
 
-    $form['advanced']['item_label'] = [
+    $form['advanced']['entity_configuration']['item_label'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Item label'),
       '#description'   => $this->t('Used if you configure the carousel to display text navigation.'),
@@ -152,7 +157,35 @@ class AddImageForm extends AddItemForm {
       ],
     ];
 
-    $form['advanced']['content_over_image'] = [
+    $form['advanced']['text_configuration'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Text configuration'),
+    ];
+
+    $form['advanced']['text_configuration']['text_to_display'] = [
+      '#type'          => 'radios',
+      '#title'         => $this->t('Text to display with the image'),
+      '#description'   => $this->t('Text can be displayed under or over the image.'),
+      '#required'      => TRUE,
+      '#options'       => [
+        'node_text'   => $this->t('Node content text'),
+        'custom_text' => $this->t('Custom text'),
+      ],
+      '#default_value' => (isset($item['text_to_display']) && $item['text_to_display']) ? $item['text_to_display'] : 'node_text',
+    ];
+
+    $form['advanced']['text_configuration']['custom_text'] = [
+      '#type'          => 'textarea',
+      '#title'         => $this->t('Custom text'),
+      '#description'   => $this->t('Custom text to be displayed under or over the image. HTML allowed.'),
+      '#default_value' => (isset($item['custom_text']) && $item['custom_text']) ? $item['custom_text'] : '',
+      '#rows'          => 6,
+      '#states'        => [
+        'visible' => [':input[name="text_to_display"]' => ['value' => 'custom_text']],
+      ],
+    ];
+
+    $form['advanced']['text_configuration']['content_over_image'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Display content text over image'),
       '#description'   => $this->t('Select "Yes" if you want to display the content linked to the image over the image.'),
@@ -165,7 +198,7 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['content_over_image']) && $item['content_over_image']) ? $item['content_over_image'] : 'false',
     ];
 
-    $form['advanced']['content_vertical_position'] = [
+    $form['advanced']['text_configuration']['content_vertical_position'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Content vertical position'),
       '#description'   => $this->t('Vertical position in where the content will be shown over the image.'),
@@ -179,7 +212,7 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['content_vertical_position']) && $item['content_vertical_position']) ? $item['content_vertical_position'] : 'vertical-bottom',
     ];
 
-    $form['advanced']['content_horizontal_position'] = [
+    $form['advanced']['text_configuration']['content_horizontal_position'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Content horizontal position'),
       '#description'   => $this->t('Horizontal position in where the content will be shown over the image.'),
@@ -193,7 +226,7 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['content_horizontal_position']) && $item['content_horizontal_position']) ? $item['content_horizontal_position'] : 'horizontal-left',
     ];
 
-    $form['advanced']['content_position_unit'] = [
+    $form['advanced']['text_configuration']['content_position_unit'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Unit to be used in position'),
       '#description'   => $this->t('The content can be moved using position. Select here the unit of measure you want.'),
@@ -206,7 +239,12 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['content_position_unit']) && $item['content_position_unit']) ? $item['content_position_unit'] : '%',
     ];
 
-    $form['advanced']['content_position_top'] = [
+    $form['advanced']['text_configuration']['position'] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => 'container-inline'],
+    ];
+
+    $form['advanced']['text_configuration']['position']['content_position_top'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Position top'),
       '#required'      => FALSE,
@@ -216,27 +254,7 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['content_position_top']) && $item['content_position_top']) ? $item['content_position_top'] : '',
     ];
 
-    $form['advanced']['content_position_bottom'] = [
-      '#type'          => 'number',
-      '#title'         => $this->t('Position bottom'),
-      '#required'      => FALSE,
-      '#step'          => .1,
-      '#min'           => 0,
-      '#max'           => 100,
-      '#default_value' => (isset($item['content_position_bottom']) && $item['content_position_bottom']) ? $item['content_position_bottom'] : '',
-    ];
-
-    $form['advanced']['content_position_left'] = [
-      '#type'          => 'number',
-      '#title'         => $this->t('Position left'),
-      '#required'      => FALSE,
-      '#step'          => .1,
-      '#min'           => 0,
-      '#max'           => 100,
-      '#default_value' => (isset($item['content_position_left']) && $item['content_position_left']) ? $item['content_position_left'] : '',
-    ];
-
-    $form['advanced']['content_position_right'] = [
+    $form['advanced']['text_configuration']['position']['content_position_right'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Position right'),
       '#required'      => FALSE,
@@ -246,15 +264,35 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['content_position_right']) && $item['content_position_right']) ? $item['content_position_right'] : '',
     ];
 
-    $form['advanced']['title_color'] = [
+    $form['advanced']['text_configuration']['position']['content_position_bottom'] = [
+      '#type'          => 'number',
+      '#title'         => $this->t('Position bottom'),
+      '#required'      => FALSE,
+      '#step'          => .1,
+      '#min'           => 0,
+      '#max'           => 100,
+      '#default_value' => (isset($item['content_position_bottom']) && $item['content_position_bottom']) ? $item['content_position_bottom'] : '',
+    ];
+
+    $form['advanced']['text_configuration']['position']['content_position_left'] = [
+      '#type'          => 'number',
+      '#title'         => $this->t('Position left'),
+      '#required'      => FALSE,
+      '#step'          => .1,
+      '#min'           => 0,
+      '#max'           => 100,
+      '#default_value' => (isset($item['content_position_left']) && $item['content_position_left']) ? $item['content_position_left'] : '',
+    ];
+
+    $form['advanced']['text_configuration']['title_color'] = [
       '#type'          => 'textfield',
-      '#title'         => $this->t('Title text custom color'),
+      '#title'         => $this->t('Node title text custom color'),
       '#description'   => $this->t('The note title text color, you can use hexadecimal value as #FFFFFF or rgba(0,0,0,1) for opacity. The last number in rgba is the opacity. Ex. 1 for 100% opaque, 0.5 for 50% opaque/transparent and so on.'),
       '#required'      => FALSE,
       '#default_value' => (isset($item['title_color']) && $item['title_color']) ? $item['title_color'] : '',
     ];
 
-    $form['advanced']['content_color'] = [
+    $form['advanced']['text_configuration']['content_color'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Content text custom color'),
       '#description'   => $this->t('The note content text color, you can use hexadecimal value as #FFFFFF or rgba(0,0,0,1) for opacity. The last number in rgba is the opacity. Ex. 1 for 100% opaque, 0.5 for 50% opaque/transparent and so on.'),
@@ -262,7 +300,7 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['content_color']) && $item['content_color']) ? $item['content_color'] : '',
     ];
 
-    $form['advanced']['background_color'] = [
+    $form['advanced']['text_configuration']['background_color'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Content background custom color'),
       '#description'   => $this->t('The note content background color, you can use hexadecimal value as #FFFFFF or rgba(0,0,0,1) for opacity. The last number in rgba is the opacity. Ex. 1 for 100% opaque, 0.5 for 50% opaque/transparent and so on.'),
@@ -282,39 +320,43 @@ class AddImageForm extends AddItemForm {
     $operation       = $form_state->getValue('operation');
     $owlcarousel2_id = $form_state->getStorage()['owlcarousel2'];
     $file_id         = $form_state->getValue('image')[0];
-    $entity_id       = $form_state->getValue('entity_id');
     $carousel        = OwlCarousel2::load($owlcarousel2_id);
+    $current_item    = $carousel->getItem($form_state->getValue('item_id'));
+    $item            = new OwlCarousel2Item([]);
+    $item_array      = $item->getArray();
 
-    $item_array = [
-      'type'                        => 'image',
-      'file_id'                     => $file_id,
-      'entity_id'                   => $entity_id,
-      'view_mode'                   => $form_state->getValue('view_mode'),
-      'image_style'                 => $form_state->getValue('image_style'),
-      'display_node_title'          => $form_state->getValue('display_node_title'),
-      'item_label'                  => $form_state->getValue('item_label'),
-      'item_label_type'             => $form_state->getValue('item_label_type'),
-      'content_over_image'          => $form_state->getValue('content_over_image'),
-      'content_vertical_position'   => $form_state->getValue('content_vertical_position'),
-      'content_horizontal_position' => $form_state->getValue('content_horizontal_position'),
-      'content_position_unit'       => $form_state->getValue('content_position_unit'),
-      'content_position_top'        => $form_state->getValue('content_position_top'),
-      'content_position_bottom'     => $form_state->getValue('content_position_bottom'),
-      'content_position_left'       => $form_state->getValue('content_position_left'),
-      'content_position_right'      => $form_state->getValue('content_position_right'),
-      'title_color'                 => $form_state->getValue('title_color'),
-      'content_color'               => $form_state->getValue('content_color'),
-      'background_color'            => $form_state->getValue('background_color'),
-    ];
+    // Prepare item settings.
+    $item_array['type']    = 'image';
+    $item_array['file_id'] = $file_id;
+    foreach ($item_array as $setting => $value) {
+      if (!in_array($setting, ['type', 'file_id'])) {
+        $item_array[$setting] = $form_state->getValue($setting);
+      }
+    }
+
+    // Check if slide image file has changed.
+    if ($current_item['file_id'] !== $file_id) {
+      // Set link file to OwlCarousel2 and set file to permanent.
+      $file = File::load($file_id);
+      \Drupal::service('file.usage')
+        ->add($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+
+      // Remove carousel usage from the previous file.
+      $previous_id   = $current_item['file_id'];
+      $previous_file = $file = File::load($previous_id);
+      \Drupal::service('file.usage')
+        ->delete($previous_file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+
+      // Delete file if it's not being used anywhere else.
+      $usage = \Drupal::service('file.usage')->listUsage($previous_file);
+      if (count($usage) == 0) {
+        $previous_file->delete();
+      }
+    }
 
     if ($operation == 'add') {
       $item = new OwlCarousel2Item($item_array);
       $carousel->addItem($item);
-
-      // Set link file to OwlCarousel2.
-      $file = File::load($file_id);
-      \Drupal::service('file.usage')
-        ->add($file, 'file', $carousel->getEntityTypeId(), $carousel->id());
     }
     else {
       $item_array['id']     = $form_state->getValue('item_id');

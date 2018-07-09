@@ -179,6 +179,64 @@ class OwlCarousel2Item {
   private $backgroundColor;
 
   /**
+   * The text to be displayed under or over the image.
+   *
+   * Possible values:
+   *  - node_text.
+   *  - custom_text.
+   *
+   * @var string
+   */
+  private $textToDisplay;
+
+  /**
+   * Custom text to be displayed under or over the image. HTML Allowed.
+   *
+   * @var string
+   */
+  private $customText;
+
+  /**
+   * Get the customText value.
+   *
+   * @return string
+   *   The customText value.
+   */
+  public function getCustomText() {
+    return $this->customText;
+  }
+
+  /**
+   * Set the customText value.
+   *
+   * @param string $customText
+   *   The customText.
+   */
+  public function setCustomText($customText) {
+    $this->customText = $customText;
+  }
+
+  /**
+   * Get the textToDisplay value.
+   *
+   * @return string
+   *   The textToDisplay value.
+   */
+  public function getTextToDisplay() {
+    return $this->textToDisplay;
+  }
+
+  /**
+   * Set the textToDisplay value.
+   *
+   * @param string $textToDisplay
+   *   The textToDisplay.
+   */
+  public function setTextToDisplay($textToDisplay) {
+    $this->textToDisplay = $textToDisplay;
+  }
+
+  /**
    * Get the titleColor value.
    *
    * @return string
@@ -659,6 +717,8 @@ class OwlCarousel2Item {
       'title_color'                 => $this->getTitleColor(),
       'content_color'               => $this->getContentColor(),
       'background_color'            => $this->getBackgroundColor(),
+      'text_to_display'             => $this->getTextToDisplay(),
+      'custom_text'                 => $this->getCustomText(),
     ];
   }
 
@@ -691,6 +751,8 @@ class OwlCarousel2Item {
     $this->setTitleColor(isset($item_array['title_color']) ? $item_array['title_color'] : '');
     $this->setContentColor(isset($item_array['content_color']) ? $item_array['content_color'] : '');
     $this->setBackgroundColor(isset($item_array['background_color']) ? $item_array['background_color'] : '');
+    $this->setTextToDisplay(isset($item_array['text_to_display']) ? $item_array['text_to_display'] : '');
+    $this->setCustomText(isset($item_array['custom_text']) ? $item_array['custom_text'] : '');
 
     $id = isset($item_array['id']) ? $item_array['id'] : NULL;
 
