@@ -71,16 +71,16 @@ class Util {
       foreach ($items as $item) {
         if ($item['type'] == 'image') {
           $data         = self::prepareImageCarousel($item, $isTextNavigation);
-          $content      .= $data['content'];
+          $content     .= $data['content'];
           $nav_titles[] = $data['navigation_titles'];
         }
         elseif ($item['type'] == 'video') {
           $data         = self::prepareVideoCarousel($item, $isTextNavigation);
-          $content      .= $data['content'];
+          $content     .= $data['content'];
           $nav_titles[] = $data['navigation_titles'];
         }
         elseif ($item['type'] == 'view') {
-          $data    = self::prepareViewCarousel($item, $isTextNavigation);
+          $data     = self::prepareViewCarousel($item, $isTextNavigation);
           $content .= $data['content'];
           foreach ($data['navigation_titles'] as $item_nav) {
             $nav_titles[] = $item_nav;
@@ -138,7 +138,7 @@ class Util {
         $node->setTitle('');
       }
       $node_render_array += node_view($node, $item['view_mode']);
-      $url               = $node->toLink()->getUrl()->toString();
+      $url                = $node->toLink()->getUrl()->toString();
     }
     else {
       $node_render_array = NULL;
