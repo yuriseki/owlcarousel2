@@ -197,6 +197,114 @@ class OwlCarousel2Item {
   private $customText;
 
   /**
+   * If the youtube video should show controls.
+   *
+   * @var bool
+   */
+  private $youtubeControls;
+
+  /**
+   * If the youtube video should show info header.
+   *
+   * @var bool
+   */
+  private $youtubeShowinfo;
+
+  /**
+   * If the youtube video should show related videos.
+   *
+   * @var bool
+   */
+  private $youtubeRel;
+
+  /**
+   * If the video will play in an infinite loop.
+   *
+   * @var bool
+   */
+  private $youtubeLoop;
+
+  /**
+   * Get the youtubeLoop value.
+   *
+   * @return bool
+   *   The youtubeLoop value.
+   */
+  public function isYoutubeLoop() {
+    return $this->youtubeLoop;
+  }
+
+  /**
+   * Set the youtubeLoop value.
+   *
+   * @param bool $youtubeLoop
+   *   The youtubeLoop.
+   */
+  public function setYoutubeLoop($youtubeLoop) {
+    $this->youtubeLoop = $youtubeLoop;
+  }
+
+  /**
+   * Get the youtubeControls value.
+   *
+   * @return bool
+   *   The youtubeControls value.
+   */
+  public function isYoutubeControls() {
+    return $this->youtubeControls;
+  }
+
+  /**
+   * Set the youtubeControls value.
+   *
+   * @param bool $youtubeControls
+   *   The youtubeControls.
+   */
+  public function setYoutubeControls($youtubeControls) {
+    $this->youtubeControls = $youtubeControls;
+  }
+
+  /**
+   * Get the youtubeShowinfo value.
+   *
+   * @return bool
+   *   The youtubeShowinfo value.
+   */
+  public function isYoutubeShowinfo() {
+    return $this->youtubeShowinfo;
+  }
+
+  /**
+   * Set the youtubeShowinfo value.
+   *
+   * @param bool $youtubeShowinfo
+   *   The youtubeShowinfo.
+   */
+  public function setYoutubeShowinfo($youtubeShowinfo) {
+    $this->youtubeShowinfo = $youtubeShowinfo;
+  }
+
+  /**
+   * Get the youtubeRel value.
+   *
+   * @return bool
+   *   The youtubeRel value.
+   */
+  public function isYoutubeRel() {
+    return $this->youtubeRel;
+  }
+
+  /**
+   * Set the youtubeRel value.
+   *
+   * @param bool $youtubeRel
+   *   The youtubeRel.
+   */
+  public function setYoutubeRel($youtubeRel) {
+    $this->youtubeRel = $youtubeRel;
+  }
+
+  /**
    * Get the customText value.
    *
    * @return string
@@ -719,6 +827,10 @@ class OwlCarousel2Item {
       'background_color'            => $this->getBackgroundColor(),
       'text_to_display'             => $this->getTextToDisplay(),
       'custom_text'                 => $this->getCustomText(),
+      'youtube_controls'            => $this->isYoutubeControls(),
+      'youtube_showinfo'            => $this->isYoutubeShowinfo(),
+      'youtube_rel'                 => $this->isYoutubeRel(),
+      'youtube_loop'                => $this->isYoutubeLoop(),
     ];
   }
 
@@ -753,6 +865,10 @@ class OwlCarousel2Item {
     $this->setBackgroundColor(isset($item_array['background_color']) ? $item_array['background_color'] : '');
     $this->setTextToDisplay(isset($item_array['text_to_display']) ? $item_array['text_to_display'] : '');
     $this->setCustomText(isset($item_array['custom_text']) ? $item_array['custom_text'] : '');
+    $this->setYoutubeControls(isset($item_array['youtube_controls']) ? $item_array['youtube_controls'] : FALSE);
+    $this->setYoutubeShowinfo(isset($item_array['youtube_showinfo']) ? $item_array['youtube_showinfo'] : FALSE);
+    $this->setYoutubeRel(isset($item_array['youtube_rel']) ? $item_array['youtube_rel'] : FALSE);
+    $this->setYoutubeLoop(isset($item_array['youtube_loop']) ? $item_array['youtube_loop'] : FALSE);
 
     $id = isset($item_array['id']) ? $item_array['id'] : NULL;
 

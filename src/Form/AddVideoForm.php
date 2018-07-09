@@ -59,6 +59,39 @@ class AddVideoForm extends AddItemForm {
       '#default_value' => (isset($item['item_label']) && $item['item_label']) ? $item['item_label'] : '',
     ];
 
+    $form['youtube_settings'] = [
+      '#type'  => 'details',
+      '#title' => $this->t('Youtube video configuration'),
+    ];
+
+    $form['youtube_settings']['youtube_controls'] = [
+      '#type'          => 'checkbox',
+      '#title'         => $this->t('Display video controls'),
+      '#description'   => $this->t('Hide or show video controls.'),
+      '#default_value' => (isset($item['youtube_controls'])) ? $item['youtube_controls'] : TRUE,
+    ];
+
+    $form['youtube_settings']['youtube_showinfo'] = [
+      '#type'          => 'checkbox',
+      '#title'         => $this->t('Show info'),
+      '#description'   => $this->t('Show youtube header bar.'),
+      '#default_value' => (isset($item['youtube_showinfo'])) ? $item['youtube_showinfo'] : TRUE,
+    ];
+
+    $form['youtube_settings']['youtube_rel'] = [
+      '#type'          => 'checkbox',
+      '#title'         => $this->t('Show related videos'),
+      '#description'   => $this->t('Show related videos in the end of the video.'),
+      '#default_value' => (isset($item['youtube_rel'])) ? $item['youtube_rel'] : FALSE,
+    ];
+
+    $form['youtube_settings']['youtube_loop'] = [
+      '#type'          => 'checkbox',
+      '#title'         => $this->t('Loop'),
+      '#description'   => $this->t('Repeat the video after it ends.'),
+      '#default_value' => (isset($item['youtube_loop'])) ? $item['youtube_loop'] : FALSE,
+    ];
+
     $form += parent::buildForm($form, $form_state, $owlcarousel2, $item_id);
 
     return $form;
@@ -70,15 +103,18 @@ class AddVideoForm extends AddItemForm {
   public function submitForm(array &$form, FormStateInterface $form_state, OwlCarousel2 $carousel = NULL) {
     $operation       = $form_state->getValue('operation');
     $owlcarousel2_id = $form_state->getStorage()['owlcarousel2'];
-    $video_url       = $form_state->getValue('video_url');
     $carousel        = OwlCarousel2::load($owlcarousel2_id);
+    $item            = new OwlCarousel2Item([]);
+    $item_array      = $item->getArray();
 
-    $item_array = [
-      'type'      => 'video',
-      'video_url' => $video_url,
-      'item_label_type' => 'custom_title',
-      'item_label' => $form_state->getValue('item_label'),
-    ];
+    // Prepare item settings.
+    $item_array['type']            = 'video';
+    $item_array['item_label_type'] = 'custom_title';
+    foreach ($item_array as $setting => $value) {
+      if (!in_array($setting, ['type', 'item_label_type'])) {
+        $item_array[$setting] = $form_state->getValue($setting);
+      }
+    }
 
     if ($operation == 'add') {
       $item = new OwlCarousel2Item($item_array);

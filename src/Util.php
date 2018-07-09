@@ -71,16 +71,16 @@ class Util {
       foreach ($items as $item) {
         if ($item['type'] == 'image') {
           $data         = self::prepareImageCarousel($item, $isTextNavigation);
-          $content     .= $data['content'];
+          $content      .= $data['content'];
           $nav_titles[] = $data['navigation_titles'];
         }
         elseif ($item['type'] == 'video') {
           $data         = self::prepareVideoCarousel($item, $isTextNavigation);
-          $content     .= $data['content'];
+          $content      .= $data['content'];
           $nav_titles[] = $data['navigation_titles'];
         }
         elseif ($item['type'] == 'view') {
-          $data     = self::prepareViewCarousel($item, $isTextNavigation);
+          $data    = self::prepareViewCarousel($item, $isTextNavigation);
           $content .= $data['content'];
           foreach ($data['navigation_titles'] as $item_nav) {
             $nav_titles[] = $item_nav;
@@ -138,7 +138,7 @@ class Util {
         $node->setTitle('');
       }
       $node_render_array += node_view($node, $item['view_mode']);
-      $url                = $node->toLink()->getUrl()->toString();
+      $url               = $node->toLink()->getUrl()->toString();
     }
     else {
       $node_render_array = NULL;
@@ -210,7 +210,14 @@ class Util {
    */
   private static function prepareVideoCarousel(array $item, bool $isTextNavigation) {
     $video_url    = $item['video_url'];
-    $item_display = '<div class="item-video owl-carousel-video-item" data-hash="' . $item['id'] . '"><a class="owl-video" href="' . $video_url . '"></a></div>';
+    $item_display = '<div id="owlcarousel-video-id-' . $item['id'] . '" 
+    class="item-video owl-carousel-video-item" 
+    data-hash="' . $item['id'] . '"
+    data-youtube-controls="' . $item['youtube_controls'] . '"
+    data-youtube-showinfo="' . $item['youtube_showinfo'] . '"
+    data-youtube-rel="' . $item['youtube_rel'] . '"
+    data-youtube-loop="' . $item['youtube_loop'] . '"
+    ><a class="owl-video" href="' . $video_url . '&controls=0"></a></div>';
     $nav_titles   = [];
     $content      = $item_display;
 

@@ -123,6 +123,32 @@
           $(this).css('background-color', this.getAttribute('data-owl-background-color'))
         });
 
+
+        /**
+         * Change the video play behavior to configure the video options.
+         */
+        $('.owl-video-wrapper').bind('DOMSubtreeModified', function () {
+          $('iframe').each(function () {
+            // Check if it's youtube video
+            if (this.src.indexOf('www.youtube.com') !== -1) {
+              var videoUrl = this.src.split('?')[0];
+              var videoId = this.src.split('?')[1].split('v=')[1];
+              var newVideoUrl = videoUrl + '?autoplay=1&v=' + videoId;
+
+              $('.owl-carousel-video-item').each(function () {
+                newVideoUrl += (this.getAttribute('data-youtube-controls') !== '0') ? '&controls=' + this.getAttribute('data-youtube-controls') : '';
+                newVideoUrl += (this.getAttribute('data-youtube-showinfo') !== '0') ? '&showinfo=' + this.getAttribute('data-youtube-showinfo') : this.getAttribute('data-youtube-showinfo');
+                // Special behavior for rel attribute. Default must be 0.
+                newVideoUrl += (this.getAttribute('data-youtube-rel') !== '1') ? '&rel=0' : '&rel=1';
+                newVideoUrl += (this.getAttribute('data-youtube-loop') !== '0') ? '&loop=' + this.getAttribute('data-youtube-loop') + '&playlist=' + videoId : '';
+              });
+
+              this.src = newVideoUrl;
+            }
+          });
+        });
+
+
       });
     }
   };
