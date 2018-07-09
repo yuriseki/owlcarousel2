@@ -349,7 +349,7 @@ class AddImageForm extends AddItemForm {
 
       // Delete file if it's not being used anywhere else.
       $usage = \Drupal::service('file.usage')->listUsage($previous_file);
-      if (count($usage) == 0) {
+      if (count($usage) == 0 && $previous_file instanceof File) {
         $previous_file->delete();
       }
     }
