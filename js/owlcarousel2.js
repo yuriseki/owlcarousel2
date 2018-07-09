@@ -136,11 +136,10 @@
               var newVideoUrl = videoUrl + '?autoplay=1&v=' + videoId;
 
               $('.owl-carousel-video-item').each(function () {
-                newVideoUrl += (this.getAttribute('data-youtube-controls') !== '0') ? '&controls=' + this.getAttribute('data-youtube-controls') : '';
-                newVideoUrl += (this.getAttribute('data-youtube-showinfo') !== '0') ? '&showinfo=' + this.getAttribute('data-youtube-showinfo') : this.getAttribute('data-youtube-showinfo');
-                // Special behavior for rel attribute. Default must be 0.
-                newVideoUrl += (this.getAttribute('data-youtube-rel') !== '1') ? '&rel=0' : '&rel=1';
-                newVideoUrl += (this.getAttribute('data-youtube-loop') !== '0') ? '&loop=' + this.getAttribute('data-youtube-loop') + '&playlist=' + videoId : '';
+                newVideoUrl += (this.getAttribute('data-youtube-controls') === '1') ? '&controls=1' : '';
+                newVideoUrl += (this.getAttribute('data-youtube-showinfo') === '1') ? '&showinfo=1' : '';
+                newVideoUrl += (this.getAttribute('data-youtube-rel') === '1') ? '&rel=1' : '&rel=0';
+                newVideoUrl += (this.getAttribute('data-youtube-loop') === '1') ? '&loop=1&playlist=' + videoId : '';
               });
 
               this.src = newVideoUrl;
