@@ -106,21 +106,21 @@
          * Apply title color.
          */
         $('.owlcarousel-node-title-link').each(function () {
-          $(this).css('color', this.getAttribute('data-owl-title-color'))
+          $(this).css('color', this.getAttribute('data-owl-title-color'));
         });
 
         /**
          * Apply content color.
          */
         $('.owlcarousel-node-content').each(function () {
-          $(this).css('color', this.getAttribute('data-owl-content-color'))
+          $(this).css('color', this.getAttribute('data-owl-content-color'));
         });
 
         /**
          * Apply content background color.
          */
         $('.owlcarousel-node-box').each(function () {
-          $(this).css('background-color', this.getAttribute('data-owl-background-color'))
+          $(this).css('background-color', this.getAttribute('data-owl-background-color'));
         });
 
 
