@@ -3,6 +3,7 @@
 namespace Drupal\owlcarousel2\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\owlcarousel2\Entity\OwlCarousel2;
@@ -103,7 +104,12 @@ class ItemController extends ControllerBase {
 
         $usage = $this->fileUsage->listUsage($file);
         if (count($usage) == 0) {
-          $file->delete();
+          try {
+            $file->delete();
+          }
+          catch (EntityStorageException $e) {
+            // Do nothing.
+          }
         }
       }
     }
