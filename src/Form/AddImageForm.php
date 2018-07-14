@@ -344,13 +344,15 @@ class AddImageForm extends AddItemForm {
       // Remove carousel usage from the previous file.
       $previous_id   = $current_item['file_id'];
       $previous_file = $file = File::load($previous_id);
-      \Drupal::service('file.usage')
-        ->delete($previous_file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+      if ($previous_file instanceof File) {
+        \Drupal::service('file.usage')
+          ->delete($previous_file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
 
-      // Delete file if it's not being used anywhere else.
-      $usage = \Drupal::service('file.usage')->listUsage($previous_file);
-      if (count($usage) == 0 && $previous_file instanceof File) {
-        $previous_file->delete();
+        // Delete file if it's not being used anywhere else.
+        $usage = \Drupal::service('file.usage')->listUsage($previous_file);
+        if (count($usage) == 0) {
+          $previous_file->delete();
+        }
       }
     }
 

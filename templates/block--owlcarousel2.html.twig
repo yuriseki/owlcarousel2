@@ -27,13 +27,15 @@
  * @ingroup themeable
  */
 #}
-<selction id="{{ id }}" class="owl-carousel owl-theme" {{ attributes }}>
-  {% if content %}
-    {{ content }}
-  {% endif %}
-</selction>
-<div id="owl-text-navigation-{{ id }}" class="owl-text-navigation">
-  {% for item in  nav_titles %}
-    <a class="owl-text-navigation-link" href="#{{ item.id }}">{{ item.title }}</a>
-  {% endfor %}
+<div id="owlcarousel2-wrapper-{{ id }}">
+  <selction id="owlcarousel2-id-{{ id }}" class="owl-carousel owl-theme" {{ attributes }}>
+    {% if content %}
+      {{ content }}
+    {% endif %}
+  </selction>
+  <div id="owl-text-navigation-{{ id }}" class="owl-text-navigation">
+    {% for item in  nav_titles %}
+      <a class="owl-text-navigation-link" href="#{{ item.id }}">{{ item.title }}</a>
+    {% endfor %}
+  </div>
 </div>
