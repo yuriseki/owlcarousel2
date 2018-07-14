@@ -93,7 +93,7 @@ class AddImageForm extends AddItemForm {
     ];
 
     $form['advanced']['entity_configuration'] = [
-      '#type' => 'fieldset',
+      '#type'  => 'fieldset',
       '#title' => $this->t('Entity link configuration'),
     ];
 
@@ -136,10 +136,16 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['view_mode']) && $item['view_mode']) ? $item['view_mode'] : '',
     ];
 
-    $form['advanced']['entity_configuration']['item_label_type'] = [
+    $form['advanced']['navigation_configuration'] = [
+      '#type'   => 'fieldset',
+      '#title'  => $this->t('Navigation configuration'),
+      '#prefix' => $this->t('Options bellow to be applied if you chose to display text or images as the navigation links.'),
+    ];
+
+    $form['advanced']['navigation_configuration']['item_label_type'] = [
       '#type'          => 'radios',
       '#title'         => $this->t('Label type'),
-      '#description'   => $this->t('If you chose to display text as the navigation links, which label do you want to use?'),
+      '#description'   => $this->t('Which label do you want to use on the navigation.'),
       '#options'       => [
         'content_title' => $this->t('Content title'),
         'custom_title'  => $this->t('Custom title'),
@@ -147,18 +153,45 @@ class AddImageForm extends AddItemForm {
       '#default_value' => (isset($item['item_label_type']) && $item['item_label_type']) ? $item['item_label_type'] : 'content_title',
     ];
 
-    $form['advanced']['entity_configuration']['item_label'] = [
+    $form['advanced']['navigation_configuration']['item_label'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Item label'),
-      '#description'   => $this->t('Used if you configure the carousel to display text navigation.'),
+      '#description'   => $this->t('Used if you configure the carousel to display custom text navigation.'),
       '#default_value' => (isset($item['item_label']) && $item['item_label']) ? $item['item_label'] : '',
       '#states'        => [
         'visible' => [':input[name="item_label_type"]' => ['value' => 'custom_title']],
       ],
     ];
 
+    $form['advanced']['navigation_configuration']['navigation_image_id'] = [
+      '#type'            => 'managed_image',
+      '#title'           => $this->t('Navigation Image'),
+      '#description'     => $this->t('Image to be used on the navigation.'),
+      '#upload_location' => 'public://owlcarousel2',
+      '#required'        => FALSE,
+
+      '#default_value' => isset($item['navigation_image_id']) && is_numeric($item['navigation_image_id']) ? ['fids' => $item['navigation_image_id']] : '',
+
+      '#multiple'           => FALSE,
+      '#uploda_validators'  => [
+        'file_validate_extensions' => ['png, gif, jpg, jpeg'],
+      ],
+      '#progress_indicator' => 'bar',
+      '#progress_message'   => $this->t('Please wait...'),
+    ];
+
+    $form['advanced']['navigation_configuration']['navigation_image_style'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Navigation image style'),
+      '#description'   => $this->t('Style to be used on the image navigation.'),
+      '#options'       => $image_styles,
+      '#required'      => TRUE,
+      '#empty_option'  => $this->t('Select'),
+      '#default_value' => (isset($item['navigation_image_style']) && $item['navigation_image_style']) ? $item['navigation_image_style'] : 'owlcarousel2_navigation',
+    ];
+
     $form['advanced']['text_configuration'] = [
-      '#type' => 'fieldset',
+      '#type'  => 'fieldset',
       '#title' => $this->t('Text configuration'),
     ];
 
@@ -240,7 +273,7 @@ class AddImageForm extends AddItemForm {
     ];
 
     $form['advanced']['text_configuration']['position'] = [
-      '#type' => 'container',
+      '#type'       => 'container',
       '#attributes' => ['class' => 'container-inline'],
     ];
 
@@ -317,13 +350,15 @@ class AddImageForm extends AddItemForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state, OwlCarousel2 $carousel = NULL) {
-    $operation       = $form_state->getValue('operation');
-    $owlcarousel2_id = $form_state->getStorage()['owlcarousel2'];
-    $file_id         = $form_state->getValue('image')[0];
-    $carousel        = OwlCarousel2::load($owlcarousel2_id);
-    $current_item    = $carousel->getItem($form_state->getValue('item_id'));
-    $item            = new OwlCarousel2Item([]);
-    $item_array      = $item->getArray();
+    $operation           = $form_state->getValue('operation');
+    $owlcarousel2_id     = $form_state->getStorage()['owlcarousel2'];
+    $file_id             = $form_state->getValue('image')[0];
+    $navigation_image_id = $form_state->getValue('navigation_image_id');
+    $navigation_image_id = isset($navigation_image_id[0]) ? $navigation_image_id[0] : NULL;
+    $carousel            = OwlCarousel2::load($owlcarousel2_id);
+    $current_item        = $carousel->getItem($form_state->getValue('item_id'));
+    $item                = new OwlCarousel2Item([]);
+    $item_array          = $item->getArray();
 
     // Prepare item settings.
     $item_array['type']    = 'image';
@@ -336,24 +371,13 @@ class AddImageForm extends AddItemForm {
 
     // Check if slide image file has changed.
     if ($current_item['file_id'] !== $file_id) {
-      // Set link file to OwlCarousel2 and set file to permanent.
-      $file = File::load($file_id);
-      \Drupal::service('file.usage')
-        ->add($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+      $this->changeFile($file_id, $carousel, $current_item['file_id']);
+    }
 
-      // Remove carousel usage from the previous file.
-      $previous_id   = $current_item['file_id'];
-      $previous_file = $file = File::load($previous_id);
-      if ($previous_file instanceof File) {
-        \Drupal::service('file.usage')
-          ->delete($previous_file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
-
-        // Delete file if it's not being used anywhere else.
-        $usage = \Drupal::service('file.usage')->listUsage($previous_file);
-        if (count($usage) == 0) {
-          $previous_file->delete();
-        }
-      }
+    // Check if slide navigation image file has changed.
+    if ($current_item['navigation_image_id'] !== $navigation_image_id) {
+      $previous = isset($current_item['navigation_image_id']) ? $current_item['navigation_image_id'] : 0;
+      $this->changeFile($navigation_image_id, $carousel, $previous);
     }
 
     if ($operation == 'add') {
@@ -382,6 +406,40 @@ class AddImageForm extends AddItemForm {
     }
 
     parent::validateForm($form, $form_state);
+  }
+
+  /**
+   * Change a file usage creating a link to the new one and remove the old one.
+   *
+   * @param int $file_id
+   *   The file id.
+   * @param \Drupal\owlcarousel2\Entity\OwlCarousel2 $carousel
+   *   The OwlCarousel.
+   * @param int $previous_file_id
+   *   The previous file id.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  private function changeFile($file_id, OwlCarousel2 $carousel, $previous_file_id) {
+    // Set link file to OwlCarousel2 and set file to permanent.
+    $file = File::load($file_id);
+    \Drupal::service('file.usage')
+      ->add($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+
+    // Remove carousel usage from the previous file.
+    if ($previous_file_id) {
+      $previous_file = $file = File::load($previous_file_id);
+      if ($previous_file instanceof File) {
+        \Drupal::service('file.usage')
+          ->delete($previous_file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+
+        // Delete file if it's not being used anywhere else.
+        $usage = \Drupal::service('file.usage')->listUsage($previous_file);
+        if (count($usage) == 0) {
+          $previous_file->delete();
+        }
+      }
+    }
   }
 
 }

@@ -5,6 +5,7 @@
  * Contains owlcarousel2.module.
  */
 
+use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\owlcarousel2\Util;
@@ -21,6 +22,7 @@ function owlcarousel2_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<p>' . t('OwlCarousel2 Implementation, full featured with youtube support, and tons of slide effects.') . '</p>';
       $output .= '<p>' . t('See the script repository on <a href="https://github.com/OwlCarousel2/OwlCarousel2">Github</a>') . '</p>';
       $output .= '<p>' . t('<a href="https://github.com/OwlCarousel2/OwlCarousel2/archive/2.3.4.zip">Click here to download the script</a> and copy the <strong><code>dist</code></strong> folder under <strong><code>{Drupal Installation}/libraries/OwlCarousel2</code></strong>') . '</p>';
+
       return $output;
 
     default:
@@ -32,21 +34,30 @@ function owlcarousel2_help($route_name, RouteMatchInterface $route_match) {
  */
 function owlcarousel2_theme() {
   $themes = [
-    'owlcarousel2'            => [
+    'owlcarousel2'                 => [
       'render element' => 'elements',
     ],
-    'owlcarousel2_image_item' => [
+    'owlcarousel2_image_item'      => [
       'render element' => 'elements',
     ],
-    'owlcarousel2_custom_text' => [
+    'owlcarousel2_navigation_item' => [
       'render element' => 'elements',
     ],
-    'owlcarousel2_node'       => [
+    'owlcarousel2_custom_text'     => [
+      'render element' => 'elements',
+    ],
+    'owlcarousel2_node'            => [
       'template'  => 'owlcarousel2-node',
       'base hook' => 'node',
     ],
-    'owlcarousel2_block'      => [
-      'variables' => ['content' => NULL, 'id' => NULL, 'nav_titles' => NULL],
+    'owlcarousel2_block'           => [
+      'variables' => [
+        'content'                => NULL,
+        'id'                     => NULL,
+        'nav_titles'             => NULL,
+        'main_items'             => NULL,
+        'navigation_as_carousel' => NULL,
+      ],
       'template'  => 'block--owlcarousel2',
     ],
   ];
@@ -60,15 +71,23 @@ function owlcarousel2_theme() {
 function owlcarousel2_preprocess_owlcarousel2(&$variables) {
   $elements = $variables['elements'];
   /** @var \Drupal\owlcarousel2\Entity\OwlCarousel2 $carousel */
-  $carousel   = $elements['#owlcarousel2'];
-  $data       = Util::getCarouselData($carousel->id());
+  $carousel = $elements['#owlcarousel2'];
+  try {
+    $data = Util::getCarouselData($carousel->id());
+  }
+  catch (EntityMalformedException $e) {
+    return $e;
+  }
   $content    = $data['content'];
   $nav_titles = $data['navigation_titles'];
+  $main_items = $data['main_items'];
   $settings   = $carousel->get('settings')->getValue()[0];
 
   $variables['content']['#markup']     = Markup::create($content);
   $variables['id']                     = $carousel->id();
   $variables['nav_titles']             = $nav_titles;
+  $variables['main_items']             = $main_items;
+  $variables['navigation_as_carousel'] = isset($settings['navigationAsCarousel']) && $settings['navigationAsCarousel'];
   $variables['#attached']['library'][] = 'owlcarousel2/owlcarousel2';
 
   $container = \Drupal::getContainer();

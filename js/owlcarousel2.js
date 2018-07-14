@@ -147,6 +147,22 @@
           });
         });
 
+        // Display main on navigation click image.
+        $('.owlcarousel2-navigation-as-carousel-main-image img').each(function (index, element) {
+          if (index === 0) {
+            $(this).css('display', 'block');
+          }
+          else {
+            $(this).css('display', 'none');
+          }
+        });
+        $('.owlcarousel2-item-image').click(function () {
+          var itemIdToDisplay = this.getAttribute('data-hash');
+          $('.owlcarousel2-navigation-as-carousel-main-image img').css('display', 'none');
+          $('#main-item-' + itemIdToDisplay).css('display', 'block');
+          $('.owlcarousel2-carousel-navigation-overlay').removeClass('active');
+          $(this).find('.owlcarousel2-carousel-navigation-overlay').addClass('active');
+        });
 
       });
     }

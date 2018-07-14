@@ -15,6 +15,7 @@
  * @ingroup themeable
  */
 #}
+{% if not navigation_as_carousel %}
 <div id="owlcarousel2-wrapper-{{ id }}">
   <div id="owlcarousel2-id-{{ id }}" class="owl-carousel owl-theme" {{ attributes.addClass('owlcarousel2') }}>
     {% if content %}
@@ -27,3 +28,17 @@
     {% endfor %}
   </div>
 </div>
+{% else %}
+  <div id="owlcarousel2-wrapper-{{ id }}">
+    {% if main_items %}
+      {% for item in main_items %}
+        <div class="owlcarousel2-navigation-as-carousel-main-image">{{ item }}</div>
+      {% endfor %}
+    {% endif %}
+    <div id="owlcarousel2-id-{{ id }}" class="owl-carousel owl-theme" {{ attributes.addClass('owlcarousel2') }}>
+      {% if content %}
+        {{ content }}
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

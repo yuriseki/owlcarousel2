@@ -37,3 +37,31 @@
 .owlcarousel2-node-inner.horizontal-right {
   text-align: right;
 }
+
+.owlcarousel2-carousel-navigation-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.owlcarousel2-carousel-navigation {
+  position: absolute;
+  align-self: center;
+}
+
+.owlcarousel2-navigation-as-carousel-main-image img {
+  display: none;
+  width: 100%;
+  height: auto;
+}
+
+.owlcarousel2-carousel-navigation-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.owlcarousel2-carousel-navigation-overlay.active {
+  background-color: rgba(0,0,0,.5);
+}

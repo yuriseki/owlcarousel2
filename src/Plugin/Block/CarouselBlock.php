@@ -3,6 +3,7 @@
 namespace Drupal\owlcarousel2\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -96,15 +97,23 @@ class CarouselBlock extends BlockBase implements ContainerFactoryPluginInterface
     }
     $settings = $carousel->get('settings')->getValue()[0];
 
-    $data       = Util::getCarouselData($carousel->id());
+    try {
+      $data = Util::getCarouselData($carousel->id());
+    }
+    catch (EntityMalformedException $e) {
+      return $e;
+    }
     $content    = $data['content'];
     $nav_titles = $data['navigation_titles'];
+    $main_items = $data['main_items'];
 
-    $build['#theme']                 = 'owlcarousel2_block';
-    $build['#content']['#markup']    = $content;
-    $build['#nav_titles']            = $nav_titles;
-    $build['#id']                    = 'owlcarousel2-id-' . $carousel->id();
-    $build['#attached']['library'][] = 'owlcarousel2/owlcarousel2';
+    $build['#theme']                  = 'owlcarousel2_block';
+    $build['#content']['#markup']     = $content;
+    $build['#nav_titles']             = $nav_titles;
+    $build['#main_items']             = $main_items;
+    $build['#navigation_as_carousel'] = isset($settings['navigationAsCarousel']) && $settings['navigationAsCarousel'];
+    $build['#id']                     = $carousel->id();
+    $build['#attached']['library'][]  = 'owlcarousel2/owlcarousel2';
 
     // In order to allow multiple carousels in the same page, we need to create
     // a key/value pair to pass to JS and apply each configuration to the
@@ -117,6 +126,7 @@ class CarouselBlock extends BlockBase implements ContainerFactoryPluginInterface
     $keyed_settings = $this->keyValue->get('owlcarousel2')->getAll();
 
     $build['#attached']['drupalSettings']['owlcarousel_settings'] = $keyed_settings;
+
     return $build;
   }
 

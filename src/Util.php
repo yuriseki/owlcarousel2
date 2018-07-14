@@ -58,6 +58,8 @@ class Util {
    * @return array
    *   content - The OwlCarousel HTML.
    *   navigation_titles - The navigation titles for text navigation.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public static function getCarouselData($owlcarousel_id) {
     $carousel   = OwlCarousel2::load($owlcarousel_id);
@@ -65,14 +67,18 @@ class Util {
     $settings   = $carousel->getSettings();
     $nav_titles = [];
 
+    $navigation_as_carousel = (isset($settings['navigationAsCarousel']) && $settings['navigationAsCarousel'] == 'true');
+
     $isTextNavigation = (isset($settings['textNavigation']) && $settings['textNavigation'] == 'true') ? TRUE : FALSE;
     $content          = '';
+    $main_items       = [];
     if (count($items)) {
       foreach ($items as $item) {
         if ($item['type'] == 'image') {
-          $data         = self::prepareImageCarousel($item, $isTextNavigation);
+          $data         = self::prepareImageCarousel($item, $isTextNavigation, $navigation_as_carousel);
           $content     .= $data['content'];
           $nav_titles[] = $data['navigation_titles'];
+          $main_items[] = $data['main_item'];
         }
         elseif ($item['type'] == 'video') {
           $data         = self::prepareVideoCarousel($item, $isTextNavigation);
@@ -93,6 +99,7 @@ class Util {
     return [
       'content'           => $content,
       'navigation_titles' => $nav_titles,
+      'main_items'        => $main_items,
     ];
 
   }
@@ -104,19 +111,37 @@ class Util {
    *   Item array.
    * @param bool $isTextNavigation
    *   If the navigation is text based.
+   * @param bool $navigationAsCarousel
+   *   If the carousel will be presented as navigation.
    *
    * @return array
    *   content - The image HTML.
    *   navigation_titles - The navigation titles for text navigation.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
    */
-  private static function prepareImageCarousel(array $item, bool $isTextNavigation) {
-    $file       = File::load($item['file_id']);
+  private static function prepareImageCarousel(array $item, bool $isTextNavigation, bool $navigationAsCarousel) {
     $content    = '';
     $nav_titles = [];
 
+    if ($navigationAsCarousel && isset($item['navigation_image_id']) && isset($item['navigation_image_style'])) {
+      $file      = File::load($item['navigation_image_id']);
+      $styleName = $item['navigation_image_style'];
+      $theme     = 'owlcarousel2_navigation_item';
+      if (!$file instanceof File) {
+        $file      = File::load($item['file_id']);
+        $styleName = $item['image_style'];
+      }
+    }
+    else {
+      $file      = File::load($item['file_id']);
+      $styleName = $item['image_style'];
+      $theme     = 'owlcarousel2_image_item';
+    }
+
     $image = [
       '#theme'      => 'image_style',
-      '#style_name' => $item['image_style'],
+      '#style_name' => $styleName,
       '#uri'        => ($file instanceof File) ? $file->getFileUri() : '',
     ];
 
@@ -162,7 +187,7 @@ class Util {
     $node_render_array['#attributes']['background_color'] = isset($item['background_color']) ? $item['background_color'] : '';
 
     $image_item = [
-      '#theme'     => 'owlcarousel2_image_item',
+      '#theme'     => $theme,
       'image'      => $image,
       'item_id'    => ['#markup' => $item['id']],
       'url'        => ['#markup' => $url],
@@ -184,6 +209,24 @@ class Util {
       $image_item['node'] = $node_render_array;
     }
 
+    // Set label for carousel navigation.
+    $main_item = [];
+    if ($navigationAsCarousel) {
+      $image_item['label']['#markup'] = (isset($item['item_label_type']) && $item['item_label_type'] == 'content_title' && $node) ? $title : $item['item_label'] ?: '';
+
+      $main_image_file = File::load($item['file_id']);
+      $main_image_style = $item['image_style'];
+
+      $main_item = [
+        '#theme'      => 'image_style',
+        '#style_name' => $main_image_style,
+        '#uri'        => ($main_image_file instanceof File) ? $main_image_file->getFileUri() : '',
+        '#attributes'  => [
+          'id' => 'main-item-' . $item['id'],
+        ],
+      ];
+    }
+
     $content .= render($image_item);
     if ($node) {
       // Restore note title.
@@ -193,6 +236,7 @@ class Util {
     return [
       'content'           => $content,
       'navigation_titles' => $nav_titles,
+      'main_item'         => $main_item,
     ];
   }
 

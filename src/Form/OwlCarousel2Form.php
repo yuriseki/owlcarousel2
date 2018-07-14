@@ -70,6 +70,11 @@ class OwlCarousel2Form extends ContentEntityForm {
 
     $settings = $entity->getSettings();
 
+    $form['settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Carousel Configuration'),
+    ];
+
     $form['settings']['items_per_slide'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Items per slide'),
@@ -205,7 +210,19 @@ class OwlCarousel2Form extends ContentEntityForm {
         'true'  => $this->t('Yes'),
         'false' => $this->t('No'),
       ],
-      '#default_value' => isset($settings['textNavigation']) ? $settings['textNavigation'] : 'no',
+      '#default_value' => isset($settings['textNavigation']) ? $settings['textNavigation'] : 'false',
+    ];
+
+    $form['settings']['navigationAsCarousel'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Use the navigation as the carousel'),
+      '#description'   => $this->t('This option will display the navigation as the carousel, and the selected item on above it. In order to work properly, you need to fill navigation text and/or images on each item.'),
+      '#required'      => TRUE,
+      '#options'       => [
+        'true'  => $this->t('Yes'),
+        'false' => $this->t('No'),
+      ],
+      '#default_value' => isset($settings['navigationAsCarousel']) ? $settings['navigationAsCarousel'] : 'false',
     ];
 
     $form['settings']['dots'] = [

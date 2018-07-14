@@ -33,8 +33,9 @@ class ItemController extends ControllerBase {
    * {@inheritdoc}
    */
   public function __construct(ContainerInterface $container) {
-    $this->fileStorage = $container->get('entity_type.manager')->getStorage('file');
-    $this->fileUsage = $container->get('file.usage');
+    $this->fileStorage = $container->get('entity_type.manager')
+      ->getStorage('file');
+    $this->fileUsage   = $container->get('file.usage');
   }
 
   /**
@@ -62,15 +63,12 @@ class ItemController extends ControllerBase {
       if ($value['id'] == $item_id) {
         unset($items[0][$key]);
 
-        // Remove carousel usage from the file.
+        // Remove carousel usage from the file(s).
         if (isset($value['file_id'])) {
-          $file = $this->fileStorage->load($value['file_id']);
-          $this->fileUsage->delete($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
-
-          $usage = $this->fileUsage->listUsage($file);
-          if (count($usage) == 0) {
-            $file->delete();
-          }
+          $this->removeFile($value['file_id'], $carousel);
+        }
+        if (isset($value['navigation_image_id'])) {
+          $this->removeFile($value['navigation_image_id'], $carousel);
         }
         break;
       }
@@ -84,6 +82,26 @@ class ItemController extends ControllerBase {
     ]);
 
     return new RedirectResponse($url->toString());
+  }
+
+  /**
+   * Remove the link between the deleted OwlCarousel2 item and the image.
+   *
+   * It will delete the image if there is no other entity using it.
+   *
+   * @param int $fid
+   *   The file id.
+   * @param \Drupal\owlcarousel2\Entity\OwlCarousel2 $carousel
+   *   The OwlCarousel2 entity.
+   */
+  private function removeFile($fid, OwlCarousel2 $carousel) {
+    $file = $this->fileStorage->load($fid);
+    $this->fileUsage->delete($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+
+    $usage = $this->fileUsage->listUsage($file);
+    if (count($usage) == 0) {
+      $file->delete();
+    }
   }
 
 }
