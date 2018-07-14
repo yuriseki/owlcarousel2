@@ -4,6 +4,7 @@ namespace Drupal\owlcarousel2\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\owlcarousel2\Entity\OwlCarousel2;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -96,11 +97,13 @@ class ItemController extends ControllerBase {
    */
   private function removeFile($fid, OwlCarousel2 $carousel) {
     $file = $this->fileStorage->load($fid);
-    $this->fileUsage->delete($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+    if ($file instanceof File) {
+      $this->fileUsage->delete($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
 
-    $usage = $this->fileUsage->listUsage($file);
-    if (count($usage) == 0) {
-      $file->delete();
+      $usage = $this->fileUsage->listUsage($file);
+      if (count($usage) == 0) {
+        $file->delete();
+      }
     }
   }
 
