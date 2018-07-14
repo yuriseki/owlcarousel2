@@ -96,13 +96,15 @@ class ItemController extends ControllerBase {
    *   The OwlCarousel2 entity.
    */
   private function removeFile($fid, OwlCarousel2 $carousel) {
-    $file = $this->fileStorage->load($fid);
-    if ($file instanceof File) {
-      $this->fileUsage->delete($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+    if (is_numeric($fid)) {
+      $file = $this->fileStorage->load($fid);
+      if ($file instanceof File) {
+        $this->fileUsage->delete($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
 
-      $usage = $this->fileUsage->listUsage($file);
-      if (count($usage) == 0) {
-        $file->delete();
+        $usage = $this->fileUsage->listUsage($file);
+        if (count($usage) == 0) {
+          $file->delete();
+        }
       }
     }
   }
