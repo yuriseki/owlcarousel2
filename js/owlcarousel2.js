@@ -153,11 +153,11 @@
 
         // Include class active on the navigation text correspondent to the
         // active slide.
-        var $div = $(".owl-item");
+        var $div = $('.owl-item');
         // Create class change listener.
         var observer = new MutationObserver(function (mutations) {
           mutations.forEach(function (mutation) {
-            if (mutation.attributeName === "class") {
+            if (mutation.attributeName === 'class') {
               var attributeValue = $(mutation.target).prop(mutation.attributeName);
               if (attributeValue.indexOf('active') !== -1) {
                 var parent = $(mutation.target).parent();
