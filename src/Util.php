@@ -78,6 +78,7 @@ class Util {
           $content     .= $data['content'];
           $nav_titles[] = $data['navigation_titles'];
         }
+        // TODO include navigation images on videos and views.
         elseif ($item['type'] == 'video') {
           $data         = self::prepareVideoCarousel($item, $isTextNavigation);
           $content     .= $data['content'];
