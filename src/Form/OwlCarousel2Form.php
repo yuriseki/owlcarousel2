@@ -213,16 +213,16 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['textNavigation']) ? $settings['textNavigation'] : 'false',
     ];
 
-    $form['settings']['navigationAsCarousel'] = [
+    $form['settings']['navigationImage'] = [
       '#type'          => 'select',
-      '#title'         => $this->t('Use the navigation as the carousel'),
-      '#description'   => $this->t('This option will display the navigation as the carousel, and the selected item on above it. In order to work properly, you need to fill navigation text and/or images on each item.'),
+      '#title'         => $this->t('Use images as background on text navigation'),
+      '#description'   => $this->t('This option will display the images under the text navigation. In order to work properly, you need to fill navigation text and/or images on each item.'),
       '#required'      => TRUE,
       '#options'       => [
         'true'  => $this->t('Yes'),
         'false' => $this->t('No'),
       ],
-      '#default_value' => isset($settings['navigationAsCarousel']) ? $settings['navigationAsCarousel'] : 'false',
+      '#default_value' => isset($settings['navigationImage']) ? $settings['navigationImage'] : 'false',
     ];
 
     $form['settings']['dots'] = [

@@ -40,9 +40,6 @@ function owlcarousel2_theme() {
     'owlcarousel2_image_item'      => [
       'render element' => 'elements',
     ],
-    'owlcarousel2_navigation_item' => [
-      'render element' => 'elements',
-    ],
     'owlcarousel2_custom_text'     => [
       'render element' => 'elements',
     ],
@@ -55,7 +52,6 @@ function owlcarousel2_theme() {
         'content'                => NULL,
         'id'                     => NULL,
         'nav_titles'             => NULL,
-        'main_items'             => NULL,
         'navigation_as_carousel' => NULL,
       ],
       'template'  => 'block--owlcarousel2',
@@ -80,14 +76,11 @@ function owlcarousel2_preprocess_owlcarousel2(&$variables) {
   }
   $content    = $data['content'];
   $nav_titles = $data['navigation_titles'];
-  $main_items = $data['main_items'];
   $settings   = $carousel->get('settings')->getValue()[0];
 
   $variables['content']['#markup']     = Markup::create($content);
   $variables['id']                     = $carousel->id();
   $variables['nav_titles']             = $nav_titles;
-  $variables['main_items']             = $main_items;
-  $variables['navigation_as_carousel'] = isset($settings['navigationAsCarousel']) && $settings['navigationAsCarousel'];
   $variables['#attached']['library'][] = 'owlcarousel2/owlcarousel2';
 
   $container = \Drupal::getContainer();

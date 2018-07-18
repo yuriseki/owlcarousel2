@@ -67,18 +67,16 @@ class Util {
     $settings   = $carousel->getSettings();
     $nav_titles = [];
 
-    $navigation_as_carousel = (isset($settings['navigationAsCarousel']) && $settings['navigationAsCarousel'] == 'true');
+    $navigationImage = isset($settings['navigationImage']) && $settings['navigationImage'] == 'true';
 
     $isTextNavigation = (isset($settings['textNavigation']) && $settings['textNavigation'] == 'true') ? TRUE : FALSE;
     $content          = '';
-    $main_items       = [];
     if (count($items)) {
       foreach ($items as $item) {
         if ($item['type'] == 'image') {
-          $data         = self::prepareImageCarousel($item, $isTextNavigation, $navigation_as_carousel);
+          $data         = self::prepareImageCarousel($item, $isTextNavigation, $navigationImage);
           $content     .= $data['content'];
           $nav_titles[] = $data['navigation_titles'];
-          $main_items[] = $data['main_item'];
         }
         elseif ($item['type'] == 'video') {
           $data         = self::prepareVideoCarousel($item, $isTextNavigation);
@@ -99,7 +97,6 @@ class Util {
     return [
       'content'           => $content,
       'navigation_titles' => $nav_titles,
-      'main_items'        => $main_items,
     ];
 
   }
@@ -111,8 +108,8 @@ class Util {
    *   Item array.
    * @param bool $isTextNavigation
    *   If the navigation is text based.
-   * @param bool $navigationAsCarousel
-   *   If the carousel will be presented as navigation.
+   * @param bool $navigationImage
+   *   If the carousel carousel navigation has images.
    *
    * @return array
    *   content - The image HTML.
@@ -120,24 +117,13 @@ class Util {
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
-  private static function prepareImageCarousel(array $item, bool $isTextNavigation, bool $navigationAsCarousel) {
+  private static function prepareImageCarousel(array $item, $isTextNavigation, $navigationImage) {
     $content    = '';
     $nav_titles = [];
 
-    if ($navigationAsCarousel && isset($item['navigation_image_id']) && isset($item['navigation_image_style'])) {
-      $file      = File::load($item['navigation_image_id']);
-      $styleName = $item['navigation_image_style'];
-      $theme     = 'owlcarousel2_navigation_item';
-      if (!$file instanceof File) {
-        $file      = File::load($item['file_id']);
-        $styleName = $item['image_style'];
-      }
-    }
-    else {
-      $file      = File::load($item['file_id']);
-      $styleName = $item['image_style'];
-      $theme     = 'owlcarousel2_image_item';
-    }
+    $file      = File::load($item['file_id']);
+    $styleName = $item['image_style'];
+    $theme     = 'owlcarousel2_image_item';
 
     $image = [
       '#theme'      => 'image_style',
@@ -149,9 +135,27 @@ class Util {
 
     // Set navigation title.
     if ($isTextNavigation) {
+      if ($navigationImage && isset($item['navigation_image_id']) && isset($item['navigation_image_style']) && $item['navigation_image_id']) {
+        $file      = File::load($item['navigation_image_id']);
+        $styleName = $item['navigation_image_style'];
+        if (!$file instanceof File) {
+          $file      = File::load($item['file_id']);
+          $styleName = $item['image_style'];
+        }
+      }
+
+      $image_nav_url = '';
+      if ($navigationImage && $file instanceof $file) {
+        $style         = \Drupal::entityTypeManager()
+          ->getStorage('image_style')
+          ->load($styleName);
+        $image_nav_url = $style->buildUrl($file->getFileUri());
+      }
+
       $nav_titles = [
-        'id'    => $item['id'],
-        'title' => (isset($item['item_label_type']) && $item['item_label_type'] == 'content_title' && $node) ? $node->getTitle() : $item['item_label'] ?: '',
+        'id'        => $item['id'],
+        'title'     => (isset($item['item_label_type']) && $item['item_label_type'] == 'content_title' && $node) ? $node->getTitle() : $item['item_label'] ?: '',
+        'image_nav' => $image_nav_url,
       ];
     }
 
@@ -209,24 +213,6 @@ class Util {
       $image_item['node'] = $node_render_array;
     }
 
-    // Set label for carousel navigation.
-    $main_item = [];
-    if ($navigationAsCarousel) {
-      $image_item['label']['#markup'] = (isset($item['item_label_type']) && $item['item_label_type'] == 'content_title' && $node) ? $title : $item['item_label'] ?: '';
-
-      $main_image_file = File::load($item['file_id']);
-      $main_image_style = $item['image_style'];
-
-      $main_item = [
-        '#theme'      => 'image_style',
-        '#style_name' => $main_image_style,
-        '#uri'        => ($main_image_file instanceof File) ? $main_image_file->getFileUri() : '',
-        '#attributes'  => [
-          'id' => 'main-item-' . $item['id'],
-        ],
-      ];
-    }
-
     $content .= render($image_item);
     if ($node) {
       // Restore note title.
@@ -236,7 +222,6 @@ class Util {
     return [
       'content'           => $content,
       'navigation_titles' => $nav_titles,
-      'main_item'         => $main_item,
     ];
   }
 

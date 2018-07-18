@@ -15,8 +15,7 @@
  * @ingroup themeable
  */
 #}
-{% if not navigation_as_carousel %}
-<div id="owlcarousel2-wrapper-{{ id }}">
+<div id="owlcarousel2-wrapper-{{ id }}" class="owlcarousel2-wrapper">
   <div id="owlcarousel2-id-{{ id }}" class="owl-carousel owl-theme" {{ attributes.addClass('owlcarousel2') }}>
     {% if content %}
       {{ content }}
@@ -24,21 +23,10 @@
   </div>
   <div id="owl-text-navigation-{{ id }}" class="owl-text-navigation">
     {% for item in  nav_titles %}
-      <a class="owl-text-navigation-link" href="#{{ item.id }}">{{ item.title }}</a>
+      <div class="owl-text-navigation-text" style="background: url({{ item.image_nav }}); background-size: cover;">
+        <a class="owl-text-navigation-link" href="#{{ item.id }}">{{ item.title }}</a>
+        <div class="owl-text-navigation-text-bg"></div>
+      </div>
     {% endfor %}
   </div>
 </div>
-{% else %}
-  <div id="owlcarousel2-wrapper-{{ id }}">
-    {% if main_items %}
-      {% for item in main_items %}
-        <div class="owlcarousel2-navigation-as-carousel-main-image">{{ item }}</div>
-      {% endfor %}
-    {% endif %}
-    <div id="owlcarousel2-id-{{ id }}" class="owl-carousel owl-theme" {{ attributes.addClass('owlcarousel2') }}>
-      {% if content %}
-        {{ content }}
-      {% endif %}
-    </div>
-  </div>
-{% endif %}

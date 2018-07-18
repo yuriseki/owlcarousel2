@@ -4,14 +4,24 @@
   elements.position.content_horizontal_position,
   elements.position.content_over_image,
   ] %}
-  <a href="{{ elements.url }}">
+  {% if elements.url %}
+  <div data-href="{{ elements.url }}" class="owlcarousel2-href">
+    {% endif %}
     <div class="owlcarousel2-item-image" data-hash="{{ elements.item_id }}">
       <div class="owlcarousel2-node-wrapper">
-        <div>{{ elements.image }}</div>
-        <div class="owlcarousel2-node-inner {{ classes|join(' ') }}" {{ 'style' }}="right: 0;" data-owl-top="{{ elements.top }}" data-owl-right="{{ elements.right }}" data-owl-bottom="{{ elements.bottom }}" data-owl-left="{{ elements.left }}">
-          {{ elements.node }}
-        </div>
+        <div class="owlcarousel2-item-image-img">{{ elements.image }}</div>
+        {% if elements.node %}
+          <div class="owlcarousel2-node-inner {{ classes|join(' ') }}"
+               style="right: 0;"
+               data-owl-top="{{ elements.top }}"
+               data-owl-right="{{ elements.right }}"
+               data-owl-bottom="{{ elements.bottom }}" data-owl-left="{{ elements.left }}">
+            {{ elements.node }}
+          </div>
+        {% endif %}
       </div>
     </div>
-  </a>
+    {% if elements.url %}
+  </div>
+  {% endif %}
 </div>

@@ -123,7 +123,6 @@
           $(this).css('background-color', this.getAttribute('data-owl-background-color'));
         });
 
-
         /**
          * Change the video play behavior to configure the video options.
          */
@@ -147,21 +146,50 @@
           });
         });
 
-        // Display main on navigation click image.
-        $('.owlcarousel2-navigation-as-carousel-main-image img').each(function (index, element) {
-          if (index === 0) {
-            $(this).css('display', 'block');
-          }
-          else {
-            $(this).css('display', 'none');
-          }
+        // Include active class to the first navigation item and remove others.
+        $('.owlcarousel2-wrapper').each(function () {
+          $($(this).find('.owl-text-navigation-text').removeClass('active')[0]).addClass('active');
         });
-        $('.owlcarousel2-item-image').click(function () {
-          var itemIdToDisplay = this.getAttribute('data-hash');
-          $('.owlcarousel2-navigation-as-carousel-main-image img').css('display', 'none');
-          $('#main-item-' + itemIdToDisplay).css('display', 'block');
-          $('.owlcarousel2-carousel-navigation-overlay').removeClass('active');
-          $(this).find('.owlcarousel2-carousel-navigation-overlay').addClass('active');
+
+        // Include class active on the navigation text correspondent to the
+        // active slide.
+        var $div = $(".owl-item");
+        // Create class change listener.
+        var observer = new MutationObserver(function (mutations) {
+          mutations.forEach(function (mutation) {
+            if (mutation.attributeName === "class") {
+              var attributeValue = $(mutation.target).prop(mutation.attributeName);
+              if (attributeValue.indexOf('active') !== -1) {
+                var parent = $(mutation.target).parent();
+                // Get the carousel id.
+                var carouselId = parent.parent().parent().parent()[0].getAttribute('id');
+                $($('#' + carouselId).find('.owl-dots')[0]).find('.owl-dot').each(function (index, element) {
+                  if (element.className.indexOf('active') !== -1) {
+                    $($('#' + carouselId).find('.owl-text-navigation-text').removeClass('active')[index]).addClass('active');
+                  }
+                });
+              }
+            }
+          });
+        });
+
+        // Activate the observer to each carousel.
+        $div.each(function () {
+          observer.observe(this, {
+            attributes: true
+          });
+        });
+
+        // Apply link on div.
+        $('.owlcarousel2-href').each(function (index, element) {
+          var href = element.getAttribute('data-href');
+          if (href.length > 1) {
+            $(this).css('cursor', 'pointer');
+            $(this).click(function () {
+              window.location.href = href;
+              return false;
+            });
+          }
         });
 
       });

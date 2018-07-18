@@ -185,7 +185,6 @@ class AddImageForm extends AddItemForm {
       '#title'         => $this->t('Navigation image style'),
       '#description'   => $this->t('Style to be used on the image navigation.'),
       '#options'       => $image_styles,
-      '#required'      => TRUE,
       '#empty_option'  => $this->t('Select'),
       '#default_value' => (isset($item['navigation_image_style']) && $item['navigation_image_style']) ? $item['navigation_image_style'] : 'owlcarousel2_navigation',
     ];
@@ -282,8 +281,6 @@ class AddImageForm extends AddItemForm {
       '#title'         => $this->t('Position top'),
       '#required'      => FALSE,
       '#step'          => .1,
-      '#min'           => 0,
-      '#max'           => 100,
       '#default_value' => (isset($item['content_position_top']) && $item['content_position_top']) ? $item['content_position_top'] : '',
     ];
 
@@ -292,8 +289,6 @@ class AddImageForm extends AddItemForm {
       '#title'         => $this->t('Position right'),
       '#required'      => FALSE,
       '#step'          => .1,
-      '#min'           => 0,
-      '#max'           => 100,
       '#default_value' => (isset($item['content_position_right']) && $item['content_position_right']) ? $item['content_position_right'] : '',
     ];
 
@@ -302,8 +297,6 @@ class AddImageForm extends AddItemForm {
       '#title'         => $this->t('Position bottom'),
       '#required'      => FALSE,
       '#step'          => .1,
-      '#min'           => 0,
-      '#max'           => 100,
       '#default_value' => (isset($item['content_position_bottom']) && $item['content_position_bottom']) ? $item['content_position_bottom'] : '',
     ];
 
@@ -312,8 +305,6 @@ class AddImageForm extends AddItemForm {
       '#title'         => $this->t('Position left'),
       '#required'      => FALSE,
       '#step'          => .1,
-      '#min'           => 0,
-      '#max'           => 100,
       '#default_value' => (isset($item['content_position_left']) && $item['content_position_left']) ? $item['content_position_left'] : '',
     ];
 
@@ -375,7 +366,7 @@ class AddImageForm extends AddItemForm {
     }
 
     // Check if slide navigation image file has changed.
-    if ($current_item['navigation_image_id'] !== $navigation_image_id) {
+    if ($navigation_image_id && !isset($current_item['navigation_image_id']) || ($current_item['navigation_image_id'] != $navigation_image_id) && $navigation_image_id) {
       $previous = isset($current_item['navigation_image_id']) ? $current_item['navigation_image_id'] : 0;
       $this->changeFile($navigation_image_id, $carousel, $previous);
     }
@@ -423,8 +414,10 @@ class AddImageForm extends AddItemForm {
   private function changeFile($file_id, OwlCarousel2 $carousel, $previous_file_id) {
     // Set link file to OwlCarousel2 and set file to permanent.
     $file = File::load($file_id);
-    \Drupal::service('file.usage')
-      ->add($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+    if ($file instanceof File) {
+      \Drupal::service('file.usage')
+        ->add($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+    }
 
     // Remove carousel usage from the previous file.
     if ($previous_file_id) {
