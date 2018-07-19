@@ -239,8 +239,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['carouselNavigation']) ? $settings['carouselNavigation'] : 'false',
     ];
 
-    $image_styles_ids = \Drupal::entityQuery('image_style')
-      ->execute();
+    $image_styles_ids = $this->entityTypeManager->getStorage('image_style')->getQuery('AND')->execute();
 
     $image_styles = [];
     foreach ($image_styles_ids as $key => $value) {
