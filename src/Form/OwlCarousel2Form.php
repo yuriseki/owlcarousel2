@@ -39,7 +39,7 @@ class OwlCarousel2Form extends ContentEntityForm {
   public function __construct(EntityManagerInterface $entity_manager) {
     parent::__construct($entity_manager);
 
-    $this->fileStorage = $entity_manager->getStorage('file');
+    $this->fileStorage   = $entity_manager->getStorage('file');
     $this->entityStorage = $entity_manager->getStorage('node');
   }
 
@@ -71,7 +71,7 @@ class OwlCarousel2Form extends ContentEntityForm {
     $settings = $entity->getSettings();
 
     $form['settings'] = [
-      '#type' => 'details',
+      '#type'  => 'details',
       '#title' => $this->t('Carousel Configuration'),
     ];
 
@@ -318,7 +318,7 @@ class OwlCarousel2Form extends ContentEntityForm {
 
     /** @var \Drupal\owlcarousel2\Entity\OwlCarousel2 $entity */
     $entity = $this->entity;
-    $items = $entity->getItems();
+    $items  = $entity->getItems();
     uasort($items[0], function ($a, $b) {
       return $a['weight'] < $b['weight'] ? -1 : 1;
     });
@@ -353,7 +353,7 @@ class OwlCarousel2Form extends ContentEntityForm {
 
         $image = FALSE;
         if ($item['file_id']) {
-          $file = $this->fileStorage->load($item['file_id']);
+          $file  = $this->fileStorage->load($item['file_id']);
           $image = [
             '#theme'      => 'image_style',
             '#style_name' => 'thumbnail',
@@ -396,14 +396,20 @@ class OwlCarousel2Form extends ContentEntityForm {
             break;
 
           case 'view':
-            $type         = $this->t('View');
-            $view         = View::load(explode(':', $item['view_id'])[0]);
-            $url          = $view->toUrl();
-            $route        = $url->getRouteName();
-            $params       = $url->getRouteParameters();
-            $item_display = Link::createFromRoute($item['view_id'], $route, $params)
-              ->toString();
-            $edit_route   = 'owlcarousel2.edit-view';
+            $type = $this->t('View');
+            $view = View::load(explode(':', $item['view_id'])[0]);
+            if ($view instanceof View) {
+              $url          = $view->toUrl();
+              $route        = $url->getRouteName();
+              $params       = $url->getRouteParameters();
+              $item_display = Link::createFromRoute($item['view_id'], $route, $params)
+                ->toString();
+            }
+            else {
+              $item_display = $this->t('View not found.');
+            }
+
+            $edit_route = 'owlcarousel2.edit-view';
             break;
 
           default:
