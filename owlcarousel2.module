@@ -34,25 +34,26 @@ function owlcarousel2_help($route_name, RouteMatchInterface $route_match) {
  */
 function owlcarousel2_theme() {
   $themes = [
-    'owlcarousel2'                 => [
+    'owlcarousel2'             => [
       'render element' => 'elements',
     ],
-    'owlcarousel2_image_item'      => [
+    'owlcarousel2_image_item'  => [
       'render element' => 'elements',
     ],
-    'owlcarousel2_custom_text'     => [
+    'owlcarousel2_custom_text' => [
       'render element' => 'elements',
     ],
-    'owlcarousel2_node'            => [
+    'owlcarousel2_node'        => [
       'template'  => 'owlcarousel2-node',
       'base hook' => 'node',
     ],
-    'owlcarousel2_block'           => [
+    'owlcarousel2_block'       => [
       'variables' => [
-        'content'                => NULL,
-        'id'                     => NULL,
-        'nav_titles'             => NULL,
-        'navigation_as_carousel' => NULL,
+        'content'              => NULL,
+        'id'                   => NULL,
+        'nav_titles'           => NULL,
+        'carousel_navigation'  => NULL,
+        'navigation_img_ratio' => NULL,
       ],
       'template'  => 'block--owlcarousel2',
     ],
@@ -76,11 +77,22 @@ function owlcarousel2_preprocess_owlcarousel2(&$variables) {
   }
   $content    = $data['content'];
   $nav_titles = $data['navigation_titles'];
+  $nav_ratio  = $data['navigation_img_ratio'];
   $settings   = $carousel->get('settings')->getValue()[0];
+
+  $carousel_navigation = isset($settings['carouselNavigation']) ? ($settings['carouselNavigation'] == 'true') : FALSE;
+  // If it is a carousel navigation, include a setting navigation size and set
+  // the items per slide to 1.
+  if ($carousel_navigation) {
+    $settings['carouselNavigationSize'] = $settings['items_per_slide'];
+    $settings['items_per_slide']        = 1;
+  }
 
   $variables['content']['#markup']     = Markup::create($content);
   $variables['id']                     = $carousel->id();
   $variables['nav_titles']             = $nav_titles;
+  $variables['carousel_navigation']    = $carousel_navigation;
+  $variables['navigation_img_ratio']   = $nav_ratio;
   $variables['#attached']['library'][] = 'owlcarousel2/owlcarousel2';
 
   $container = \Drupal::getContainer();

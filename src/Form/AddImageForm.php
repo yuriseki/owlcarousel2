@@ -4,11 +4,11 @@ namespace Drupal\owlcarousel2\Form;
 
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\owlcarousel2\Entity\OwlCarousel2;
 use Drupal\owlcarousel2\OwlCarousel2Item;
+use Drupal\owlcarousel2\Util;
 
 /**
  * Class AddImageForm.
@@ -178,15 +178,6 @@ class AddImageForm extends AddItemForm {
       ],
       '#progress_indicator' => 'bar',
       '#progress_message'   => $this->t('Please wait...'),
-    ];
-
-    $form['advanced']['navigation_configuration']['navigation_image_style'] = [
-      '#type'          => 'select',
-      '#title'         => $this->t('Navigation image style'),
-      '#description'   => $this->t('Style to be used on the image navigation.'),
-      '#options'       => $image_styles,
-      '#empty_option'  => $this->t('Select'),
-      '#default_value' => (isset($item['navigation_image_style']) && $item['navigation_image_style']) ? $item['navigation_image_style'] : 'owlcarousel2_navigation',
     ];
 
     $form['advanced']['text_configuration'] = [
@@ -362,13 +353,13 @@ class AddImageForm extends AddItemForm {
 
     // Check if slide image file has changed.
     if ($current_item['file_id'] !== $file_id) {
-      $this->changeFile($file_id, $carousel, $current_item['file_id']);
+      Util::changeFile($file_id, $carousel, $current_item['file_id']);
     }
 
     // Check if slide navigation image file has changed.
     if ($navigation_image_id && !isset($current_item['navigation_image_id']) || ($current_item['navigation_image_id'] != $navigation_image_id) && $navigation_image_id) {
       $previous = isset($current_item['navigation_image_id']) ? $current_item['navigation_image_id'] : 0;
-      $this->changeFile($navigation_image_id, $carousel, $previous);
+      Util::changeFile($navigation_image_id, $carousel, $previous);
     }
 
     if ($operation == 'add') {
@@ -397,42 +388,6 @@ class AddImageForm extends AddItemForm {
     }
 
     parent::validateForm($form, $form_state);
-  }
-
-  /**
-   * Change a file usage creating a link to the new one and remove the old one.
-   *
-   * @param int $file_id
-   *   The file id.
-   * @param \Drupal\owlcarousel2\Entity\OwlCarousel2 $carousel
-   *   The OwlCarousel.
-   * @param int $previous_file_id
-   *   The previous file id.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  private function changeFile($file_id, OwlCarousel2 $carousel, $previous_file_id) {
-    // Set link file to OwlCarousel2 and set file to permanent.
-    $file = File::load($file_id);
-    if ($file instanceof File) {
-      \Drupal::service('file.usage')
-        ->add($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
-    }
-
-    // Remove carousel usage from the previous file.
-    if ($previous_file_id) {
-      $previous_file = $file = File::load($previous_file_id);
-      if ($previous_file instanceof File) {
-        \Drupal::service('file.usage')
-          ->delete($previous_file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
-
-        // Delete file if it's not being used anywhere else.
-        $usage = \Drupal::service('file.usage')->listUsage($previous_file);
-        if (count($usage) == 0) {
-          $previous_file->delete();
-        }
-      }
-    }
   }
 
 }

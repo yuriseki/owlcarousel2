@@ -67,16 +67,16 @@ class Util {
     $settings   = $carousel->getSettings();
     $nav_titles = [];
 
-    $navigationImage = isset($settings['navigationImage']) && $settings['navigationImage'] == 'true';
-
     $isTextNavigation = (isset($settings['textNavigation']) && $settings['textNavigation'] == 'true') ? TRUE : FALSE;
-    $content          = '';
+
+    $content = '';
     if (count($items)) {
       foreach ($items as $item) {
         if ($item['type'] == 'image') {
-          $data         = self::prepareImageCarousel($item, $isTextNavigation, $navigationImage);
-          $content     .= $data['content'];
-          $nav_titles[] = $data['navigation_titles'];
+          $data            = self::prepareImageCarousel($item, $carousel);
+          $content        .= $data['content'];
+          $nav_titles[]    = $data['navigation_titles'];
+          $nav_image_ratio = $data['nav_ratio'];
         }
         // TODO include navigation images on videos and views.
         elseif ($item['type'] == 'video') {
@@ -96,8 +96,9 @@ class Util {
     }
 
     return [
-      'content'           => $content,
-      'navigation_titles' => $nav_titles,
+      'content'              => $content,
+      'navigation_titles'    => $nav_titles,
+      'navigation_img_ratio' => $nav_image_ratio,
     ];
 
   }
@@ -107,10 +108,8 @@ class Util {
    *
    * @param array $item
    *   Item array.
-   * @param bool $isTextNavigation
-   *   If the navigation is text based.
-   * @param bool $navigationImage
-   *   If the carousel carousel navigation has images.
+   * @param \Drupal\owlcarousel2\Entity\OwlCarousel2 $carousel
+   *   The OwlCarousel object.
    *
    * @return array
    *   content - The image HTML.
@@ -118,39 +117,46 @@ class Util {
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
-  private static function prepareImageCarousel(array $item, $isTextNavigation, $navigationImage) {
-    $content    = '';
-    $nav_titles = [];
+  private static function prepareImageCarousel(array $item, OwlCarousel2 $carousel) {
+    $content            = '';
+    $nav_titles         = [];
+    $image_nav_ratio    = 0;
+    $settings           = $carousel->getSettings();
+    $navigation_image   = isset($settings['navigationImage']) && $settings['navigationImage'] == 'true';
+    $is_text_navigation = (isset($settings['textNavigation']) && $settings['textNavigation'] == 'true') ? TRUE : FALSE;
+    $nav_style_name     = isset($settings['carouselNavigationImageStyle']) ? $settings['carouselNavigationImageStyle'] : 'thumbnail';
 
-    $file      = File::load($item['file_id']);
-    $styleName = $item['image_style'];
-    $theme     = 'owlcarousel2_image_item';
+    $file       = File::load($item['file_id']);
+    $style_name = $item['image_style'];
+    $theme      = 'owlcarousel2_image_item';
 
     $image = [
       '#theme'      => 'image_style',
-      '#style_name' => $styleName,
+      '#style_name' => $style_name,
       '#uri'        => ($file instanceof File) ? $file->getFileUri() : '',
     ];
 
     $node = is_null($item['entity_id']) ? FALSE : Node::load($item['entity_id']);
 
     // Set navigation title.
-    if ($isTextNavigation) {
-      if ($navigationImage && isset($item['navigation_image_id']) && isset($item['navigation_image_style']) && $item['navigation_image_id']) {
-        $file      = File::load($item['navigation_image_id']);
-        $styleName = $item['navigation_image_style'];
+    if ($is_text_navigation) {
+      if ($navigation_image && isset($item['navigation_image_id']) && isset($item['navigation_image_style']) && $item['navigation_image_id']) {
+        $file = File::load($item['navigation_image_id']);
         if (!$file instanceof File) {
-          $file      = File::load($item['file_id']);
-          $styleName = $item['image_style'];
+          $file = File::load($item['file_id']);
         }
       }
 
       $image_nav_url = '';
-      if ($navigationImage && $file instanceof $file) {
+      if ($navigation_image && $file instanceof $file) {
         $style         = \Drupal::entityTypeManager()
           ->getStorage('image_style')
-          ->load($styleName);
+          ->load($nav_style_name);
         $image_nav_url = $style->buildUrl($file->getFileUri());
+
+        $image_nav       = \Drupal::service('image.factory')
+          ->get($file->getFileUri());
+        $image_nav_ratio = $image_nav->getHeight() / $image_nav->getWidth() * 100;
       }
 
       $nav_titles = [
@@ -223,6 +229,7 @@ class Util {
     return [
       'content'           => $content,
       'navigation_titles' => $nav_titles,
+      'nav_ratio'         => $image_nav_ratio,
     ];
   }
 
@@ -318,6 +325,72 @@ class Util {
       'navigation_titles' => $nav_titles,
     ];
 
+  }
+
+
+  private static function getNavigationInfo(array $item, $navigation_image, $node = NULL) {
+    if ($navigation_image && isset($item['navigation_image_id']) && isset($item['navigation_image_style']) && $item['navigation_image_id']) {
+      $file = File::load($item['navigation_image_id']);
+      if (!$file instanceof File) {
+        $file = File::load($item['file_id']);
+      }
+    }
+
+    $image_nav_url = '';
+    if ($navigation_image && $file instanceof $file) {
+      $style         = \Drupal::entityTypeManager()
+        ->getStorage('image_style')
+        ->load($nav_style_name);
+      $image_nav_url = $style->buildUrl($file->getFileUri());
+
+      $image_nav       = \Drupal::service('image.factory')
+        ->get($file->getFileUri());
+      $image_nav_ratio = $image_nav->getHeight() / $image_nav->getWidth() * 100;
+    }
+
+    $nav_titles = [
+      'id'        => $item['id'],
+      'title'     => (isset($item['item_label_type']) && $item['item_label_type'] == 'content_title' && $node) ? $node->getTitle() : $item['item_label'] ?: '',
+      'image_nav' => $image_nav_url,
+    ];
+
+    return $nav_titles;
+  }
+
+  /**
+   * Change a file usage creating a link to the new one and remove the old one.
+   *
+   * @param int $file_id
+   *   The file id.
+   * @param \Drupal\owlcarousel2\Entity\OwlCarousel2 $carousel
+   *   The OwlCarousel.
+   * @param int $previous_file_id
+   *   The previous file id.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public static function changeFile($file_id, OwlCarousel2 $carousel, $previous_file_id) {
+    // Set link file to OwlCarousel2 and set file to permanent.
+    $file = File::load($file_id);
+    if ($file instanceof File) {
+      \Drupal::service('file.usage')
+        ->add($file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+    }
+
+    // Remove carousel usage from the previous file.
+    if ($previous_file_id) {
+      $previous_file = $file = File::load($previous_file_id);
+      if ($previous_file instanceof File) {
+        \Drupal::service('file.usage')
+          ->delete($previous_file, 'owlcarousel2', $carousel->getEntityTypeId(), $carousel->id());
+
+        // Delete file if it's not being used anywhere else.
+        $usage = \Drupal::service('file.usage')->listUsage($previous_file);
+        if (count($usage) == 0) {
+          $previous_file->delete();
+        }
+      }
+    }
   }
 
 }

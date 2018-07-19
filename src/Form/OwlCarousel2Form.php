@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\owlcarousel2\Entity\OwlCarousel2;
 use Drupal\views\Entity\View;
@@ -225,6 +226,39 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['navigationImage']) ? $settings['navigationImage'] : 'false',
     ];
 
+    $form['settings']['carouselNavigation'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Use the navigation as Carousel'),
+      '#description'   => $this->t("It's useful when you have to many items and you are displaying them as images on the navigation. You can use the automatic conversion of the main image (if the slide is an image) or an specific image for each item on the navigation. (Currently not working for views items).") . '<br>' .
+      $this->t('The "Items per slide" configuration option will going to be applied on the navigation and only one item will be presented on the main slide.'),
+      '#required'      => TRUE,
+      '#options'       => [
+        'true'  => $this->t('Yes'),
+        'false' => $this->t('No'),
+      ],
+      '#default_value' => isset($settings['carouselNavigation']) ? $settings['carouselNavigation'] : 'false',
+    ];
+
+    $image_styles_ids = \Drupal::entityQuery('image_style')
+      ->execute();
+
+    $image_styles = [];
+    foreach ($image_styles_ids as $key => $value) {
+      $image_style = ImageStyle::load($value);
+      if ($image_style->status() === TRUE) {
+        $image_styles[$key] = $image_style->label();
+      }
+    }
+
+    $form['settings']['carouselNavigationImageStyle'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Navigation image style'),
+      '#description'   => $this->t('Style to be used on the image navigation.'),
+      '#options'       => $image_styles,
+      '#empty_option'  => $this->t('Select'),
+      '#default_value' => isset($settings['carouselNavigationImageStyle']) ? $settings['carouselNavigationImageStyle'] : '',
+    ];
+
     $form['settings']['dots'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Show dots navigation'),
@@ -253,18 +287,18 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['dotsClass']) ? $settings['dotsClass'] : 'owl-dots',
     ];
 
-    $form['settings']['lazyLoad'] = [
-      '#type'          => 'select',
-      '#title'         => $this->t('Lazy load'),
-      '#description'   => $this->t('Present images using lazy load. Do not use lazy load if you have videos.'),
-      '#required'      => TRUE,
-      '#options'       => [
-        'true'  => $this->t('Yes'),
-        'false' => $this->t('No'),
-      ],
-      '#default_value' => isset($settings['lazyLoad']) ? $settings['lazyLoad'] : 'false',
-    ];
-
+    // Todo: Implement lazy Load.
+    //    $form['settings']['lazyLoad'] = [
+    //      '#type'          => 'select',
+    //      '#title'         => $this->t('Lazy load'),
+    //      '#description'   => $this->t('Present images using lazy load. Do not use lazy load if you have videos.'),
+    //      '#required'      => TRUE,
+    //      '#options'       => [
+    //        'true'  => $this->t('Yes'),
+    //        'false' => $this->t('No'),
+    //      ],
+    //      '#default_value' => isset($settings['lazyLoad']) ? $settings['lazyLoad'] : 'false',
+    //    ];.
     $effects = ['' => $this->t('Default')];
     $effects += $this->getEffects();
 
@@ -318,7 +352,7 @@ class OwlCarousel2Form extends ContentEntityForm {
 
     /** @var \Drupal\owlcarousel2\Entity\OwlCarousel2 $entity */
     $entity = $this->entity;
-    $items  = $entity->getItems();
+    $items = $entity->getItems();
     uasort($items[0], function ($a, $b) {
       return $a['weight'] < $b['weight'] ? -1 : 1;
     });
@@ -353,7 +387,7 @@ class OwlCarousel2Form extends ContentEntityForm {
 
         $image = FALSE;
         if ($item['file_id']) {
-          $file  = $this->fileStorage->load($item['file_id']);
+          $file = $this->fileStorage->load($item['file_id']);
           $image = [
             '#theme'      => 'image_style',
             '#style_name' => 'thumbnail',

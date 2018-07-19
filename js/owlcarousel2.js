@@ -31,9 +31,25 @@
               mouseDrag: owl_settings.mouseDrag !== 'false',
               touchDrag: owl_settings.touchDrag !== 'false',
               stagePadding: parseInt(owl_settings.stagePadding ? owl_settings.stagePadding : 0),
-              navText: [owl_settings.previousText ? owl_settings.previousText : '<', owl_settings.previousText ? owl_settings.nextText : '>']
+              navText: owl_settings.carouselNavigation !== 'true' ? [owl_settings.previousText ? owl_settings.previousText : '<', owl_settings.previousText ? owl_settings.nextText : '>'] : []
             });
 
+            if (owl_settings.carouselNavigation === 'true') {
+              $('#owl-text-navigation-' + key).owlCarousel({
+                video: false,
+                loop: true,
+                margin: parseInt(owl_settings.margin ? owl_settings.margin : 0),
+                nav: owl_settings.nav === 'true',
+                items: parseInt(owl_settings.carouselNavigationSize ? owl_settings.carouselNavigationSize : 3),
+                autoplay: false,
+                dots: false,
+                center: owl_settings.center === 'true',
+                mouseDrag: owl_settings.mouseDrag !== 'false',
+                touchDrag: owl_settings.touchDrag !== 'false',
+                stagePadding: parseInt(owl_settings.stagePadding ? owl_settings.stagePadding : 0),
+                navText: [owl_settings.previousText ? owl_settings.previousText : '<', owl_settings.previousText ? owl_settings.nextText : '>']
+              });
+            }
             // Video adjust
             var videoThumb = $('#owlcarousel2-id-' + key + ' .owl-video-tn');
             videoThumb.each(function () {

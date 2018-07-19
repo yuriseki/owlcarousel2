@@ -232,33 +232,6 @@ class OwlCarousel2Item {
   private $navigationImageId;
 
   /**
-   * The style for the navigation image.
-   *
-   * @var string
-   */
-  private $navigationImageStyle;
-
-  /**
-   * Get the navigationImageStyle value.
-   *
-   * @return string
-   *   The navigationImageStyle value.
-   */
-  public function getNavigationImageStyle() {
-    return $this->navigationImageStyle;
-  }
-
-  /**
-   * Set the navigationImageStyle value.
-   *
-   * @param string $navigationImageStyle
-   *   The navigationImageStyle.
-   */
-  public function setNavigationImageStyle($navigationImageStyle) {
-    $this->navigationImageStyle = $navigationImageStyle;
-  }
-
-  /**
    * Get the navigationImageId value.
    *
    * @return int
@@ -886,7 +859,6 @@ class OwlCarousel2Item {
       'youtube_rel'                 => $this->isYoutubeRel(),
       'youtube_loop'                => $this->isYoutubeLoop(),
       'navigation_image_id'         => $this->getNavigationImageId(),
-      'navigation_image_style'       => $this->getNavigationImageStyle(),
     ];
   }
 
@@ -925,7 +897,6 @@ class OwlCarousel2Item {
     $this->setYoutubeShowinfo(isset($item_array['youtube_showinfo']) ? $item_array['youtube_showinfo'] : FALSE);
     $this->setYoutubeRel(isset($item_array['youtube_rel']) ? $item_array['youtube_rel'] : FALSE);
     $this->setYoutubeLoop(isset($item_array['youtube_loop']) ? $item_array['youtube_loop'] : FALSE);
-    $this->setNavigationImageStyle(isset($item_array['navigation_image_style']) ? $item_array['navigation_image_style'] : '');
     if (isset($item_array['navigation_image_id'])) {
       $this->setNavigationImageId(is_array($item_array['navigation_image_id']) ? (isset($item_array['navigation_image_id'][0]) ? $item_array['navigation_image_id'][0] : $item_array['navigation_image_id']) : $item_array['navigation_image_id']);
     }

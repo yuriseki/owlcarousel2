@@ -5,6 +5,7 @@ namespace Drupal\owlcarousel2\Form;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\owlcarousel2\Entity\OwlCarousel2;
 use Drupal\owlcarousel2\OwlCarousel2Item;
+use Drupal\owlcarousel2\Util;
 
 /**
  * Class addVideoForm.
@@ -59,6 +60,23 @@ class AddVideoForm extends AddItemForm {
       '#default_value' => (isset($item['item_label']) && $item['item_label']) ? $item['item_label'] : '',
     ];
 
+    $form['navigation_image_id'] = [
+      '#type'            => 'managed_image',
+      '#title'           => $this->t('Navigation Image'),
+      '#description'     => $this->t('Image to be used on the navigation.'),
+      '#upload_location' => 'public://owlcarousel2',
+      '#required'        => FALSE,
+
+      '#default_value' => isset($item['navigation_image_id']) && is_numeric($item['navigation_image_id']) ? ['fids' => $item['navigation_image_id']] : '',
+
+      '#multiple'           => FALSE,
+      '#uploda_validators'  => [
+        'file_validate_extensions' => ['png, gif, jpg, jpeg'],
+      ],
+      '#progress_indicator' => 'bar',
+      '#progress_message'   => $this->t('Please wait...'),
+    ];
+
     $form['youtube_settings'] = [
       '#type'  => 'details',
       '#title' => $this->t('Youtube video configuration'),
@@ -101,11 +119,14 @@ class AddVideoForm extends AddItemForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state, OwlCarousel2 $carousel = NULL) {
-    $operation       = $form_state->getValue('operation');
-    $owlcarousel2_id = $form_state->getStorage()['owlcarousel2'];
-    $carousel        = OwlCarousel2::load($owlcarousel2_id);
-    $item            = new OwlCarousel2Item([]);
-    $item_array      = $item->getArray();
+    $operation           = $form_state->getValue('operation');
+    $owlcarousel2_id     = $form_state->getStorage()['owlcarousel2'];
+    $carousel            = OwlCarousel2::load($owlcarousel2_id);
+    $item                = new OwlCarousel2Item([]);
+    $item_array          = $item->getArray();
+    $current_item        = $carousel->getItem($form_state->getValue('item_id'));
+    $navigation_image_id = $form_state->getValue('navigation_image_id');
+    $navigation_image_id = isset($navigation_image_id[0]) ? $navigation_image_id[0] : NULL;
 
     // Prepare item settings.
     $item_array['type']            = 'video';
@@ -114,6 +135,12 @@ class AddVideoForm extends AddItemForm {
       if (!in_array($setting, ['type', 'item_label_type'])) {
         $item_array[$setting] = $form_state->getValue($setting);
       }
+    }
+
+    // Check if slide navigation image file has changed.
+    if ($navigation_image_id && !isset($current_item['navigation_image_id']) || ($current_item['navigation_image_id'] != $navigation_image_id) && $navigation_image_id) {
+      $previous = isset($current_item['navigation_image_id']) ? $current_item['navigation_image_id'] : 0;
+      Util::changeFile($navigation_image_id, $carousel, $previous);
     }
 
     if ($operation == 'add') {
