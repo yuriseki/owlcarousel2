@@ -76,7 +76,12 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#title' => $this->t('Carousel Configuration'),
     ];
 
-    $form['settings']['items_per_slide'] = [
+    $form['settings']['slide_options'] = [
+      '#type'   => 'fieldset',
+      '#title'  => $this->t('Slide configuration'),
+    ];
+
+    $form['settings']['slide_options']['items_per_slide'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Items per slide'),
       '#description'   => $this->t('How many items per slide?'),
@@ -86,7 +91,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['items_per_slide']) ? $settings['items_per_slide'] : 1,
     ];
 
-    $form['settings']['margin'] = [
+    $form['settings']['slide_options']['margin'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Margin'),
       '#description'   => $this->t('Margin between items in px.'),
@@ -96,7 +101,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['margin']) ? $settings['margin'] : 1,
     ];
 
-    $form['settings']['stagePadding'] = [
+    $form['settings']['slide_options']['stagePadding'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Stage Padding'),
       '#description'   => $this->t('Padding left and right on stage (can see neighbours) px.'),
@@ -106,7 +111,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['stagePadding']) ? $settings['stagePadding'] : 0,
     ];
 
-    $form['settings']['center'] = [
+    $form['settings']['slide_options']['center'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Center item'),
       '#description'   => $this->t('Works well with even an odd number of items. Make sense only if you are displaying more than 1 item per slide.'),
@@ -118,7 +123,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['center']) ? $settings['center'] : 'true',
     ];
 
-    $form['settings']['loop'] = [
+    $form['settings']['slide_options']['loop'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Loop'),
       '#description'   => $this->t('Infinite loop.'),
@@ -130,7 +135,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['loop']) ? $settings['loop'] : 'true',
     ];
 
-    $form['settings']['autoplay'] = [
+    $form['settings']['slide_options']['autoplay'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Enable auto play'),
       '#description'   => $this->t('If the carousel will play automatically.'),
@@ -142,7 +147,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['autoplay']) ? $settings['autoplay'] : 'yes',
     ];
 
-    $form['settings']['autoplayHoverPause'] = [
+    $form['settings']['slide_options']['autoplayHoverPause'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Pause auto play on mouse over'),
       '#description'   => $this->t('If the auto play will pause when mouse over.'),
@@ -154,7 +159,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['autoplayHoverPause']) ? $settings['autoplayHoverPause'] : 'yes',
     ];
 
-    $form['settings']['autoplaySpeed'] = [
+    $form['settings']['slide_options']['autoplaySpeed'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Auto play speed'),
       '#description'   => $this->t('Value em milli-seconds. Only applicable when enable with enable auto play (yes).'),
@@ -164,7 +169,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['autoplaySpeed']) ? $settings['autoplaySpeed'] : 2000,
     ];
 
-    $form['settings']['autoplayTimeout'] = [
+    $form['settings']['slide_options']['autoplayTimeout'] = [
       '#type'          => 'number',
       '#title'         => $this->t('Auto play timeout'),
       '#description'   => $this->t('Value em milli-seconds. Only applicable when enable with enable auto play (yes).'),
@@ -174,7 +179,12 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['autoplayTimeout']) ? $settings['autoplayTimeout'] : 5000,
     ];
 
-    $form['settings']['nav'] = [
+    $form['settings']['navigation_options'] = [
+      '#type'   => 'fieldset',
+      '#title'  => $this->t('Navigation configuration'),
+    ];
+
+    $form['settings']['navigation_options']['nav'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Show navigation'),
       '#description'   => $this->t('Show the navigation items, the < and > signals'),
@@ -186,7 +196,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['nav']) ? $settings['nav'] : 'false',
     ];
 
-    $form['settings']['previousText'] = [
+    $form['settings']['navigation_options']['previousText'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Text to PREVIOUS navigation button'),
       '#description'   => $this->t('Text to be used on NEXT navigation button default: "<". HTML allowed.'),
@@ -194,7 +204,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['previousText']) ? $settings['previousText'] : '<',
     ];
 
-    $form['settings']['nextText'] = [
+    $form['settings']['navigation_options']['nextText'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Text to NEXT navigation button'),
       '#description'   => $this->t('Text to be used on NEXT navigation button default: ">". HTML allowed.'),
@@ -202,7 +212,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['nextText']) ? $settings['nextText'] : '>',
     ];
 
-    $form['settings']['textNavigation'] = [
+    $form['settings']['navigation_options']['textNavigation'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Show text navigation'),
       '#description'   => $this->t('Show navigation text bellow the images.'),
@@ -214,7 +224,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['textNavigation']) ? $settings['textNavigation'] : 'false',
     ];
 
-    $form['settings']['navigationImage'] = [
+    $form['settings']['navigation_options']['navigationImage'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Use images as background on text navigation'),
       '#description'   => $this->t('This option will display the images under the text navigation. In order to work properly, you need to fill navigation text and/or images on each item.'),
@@ -226,7 +236,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['navigationImage']) ? $settings['navigationImage'] : 'false',
     ];
 
-    $form['settings']['carouselNavigation'] = [
+    $form['settings']['navigation_options']['carouselNavigation'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Use the navigation as Carousel'),
       '#description'   => $this->t("It's useful when you have to many items and you are displaying them as images on the navigation. You can use the automatic conversion of the main image (if the slide is an image) or an specific image for each item on the navigation. (Currently not working for views items).") . '<br>' .
@@ -249,7 +259,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       }
     }
 
-    $form['settings']['carouselNavigationImageStyle'] = [
+    $form['settings']['navigation_options']['carouselNavigationImageStyle'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Navigation image style'),
       '#description'   => $this->t('Style to be used on the image navigation.'),
@@ -258,7 +268,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['carouselNavigationImageStyle']) ? $settings['carouselNavigationImageStyle'] : '',
     ];
 
-    $form['settings']['dots'] = [
+    $form['settings']['navigation_options']['dots'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Show dots navigation'),
       '#description'   => $this->t('Show the dots navigation.'),
@@ -270,7 +280,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['dots']) ? $settings['dots'] : 'true',
     ];
 
-    $form['settings']['dotClass'] = [
+    $form['settings']['navigation_options']['dotClass'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Dot Class'),
       '#description'   => $this->t('CSS class to be used on each dot (default: owl-dot).'),
@@ -278,7 +288,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['dotClass']) ? $settings['dotClass'] : 'owl-dot',
     ];
 
-    $form['settings']['dotsClass'] = [
+    $form['settings']['navigation_options']['dotsClass'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Dots Class'),
       '#description'   => $this->t('CSS class to be used wrap the dots (default: owl-dots).'),
@@ -287,21 +297,15 @@ class OwlCarousel2Form extends ContentEntityForm {
     ];
 
     // Todo: Implement lazy Load.
-    //    $form['settings']['lazyLoad'] = [
-    //      '#type'          => 'select',
-    //      '#title'         => $this->t('Lazy load'),
-    //      '#description'   => $this->t('Present images using lazy load. Do not use lazy load if you have videos.'),
-    //      '#required'      => TRUE,
-    //      '#options'       => [
-    //        'true'  => $this->t('Yes'),
-    //        'false' => $this->t('No'),
-    //      ],
-    //      '#default_value' => isset($settings['lazyLoad']) ? $settings['lazyLoad'] : 'false',
-    //    ];.
+    $form['settings']['transition_options'] = [
+      '#type'   => 'fieldset',
+      '#title'  => $this->t('Transition configuration'),
+    ];
+
     $effects = ['' => $this->t('Default')];
     $effects += $this->getEffects();
 
-    $form['settings']['animateIn'] = [
+    $form['settings']['transition_options']['animateIn'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Animation when slide goes in'),
       '#description'   => $this->t('The animation to be applied at the item when it goes in. Only works if there is one (1) item per slide.'),
@@ -309,7 +313,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['animateIn']) ? $settings['animateIn'] : 'false',
     ];
 
-    $form['settings']['animateOut'] = [
+    $form['settings']['transition_options']['animateOut'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Animation when slide goes out'),
       '#description'   => $this->t('The animation to be applied at the item when it goes put. Only works if there is one (1) item per slide.'),
@@ -317,7 +321,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['animateOut']) ? $settings['animateOut'] : 'false',
     ];
 
-    $form['settings']['mouseDrag'] = [
+    $form['settings']['transition_options']['mouseDrag'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Mouse drag enabled'),
       '#description'   => $this->t('Make slides mouse draggable.'),
@@ -329,7 +333,7 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#default_value' => isset($settings['mouseDrag']) ? $settings['mouseDrag'] : 'true',
     ];
 
-    $form['settings']['touchDrag'] = [
+    $form['settings']['transition_options']['touchDrag'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Touch drag enabled'),
       '#description'   => $this->t('Make slides touch draggable.'),
@@ -566,7 +570,8 @@ class OwlCarousel2Form extends ContentEntityForm {
     }
 
     // Save settings.
-    $settings_keys     = $form['settings'];
+    $form_settings     = $form['settings'];
+    $settings_keys     = array_merge($form_settings['slide_options'], $form_settings['navigation_options'], $form_settings['transition_options']);
     $form_state_values = $form_state->getValues();
     $settings          = [];
     foreach ($settings_keys as $key => $value) {
