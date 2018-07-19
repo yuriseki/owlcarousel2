@@ -264,7 +264,6 @@ class OwlCarousel2Form extends ContentEntityForm {
       '#title'         => $this->t('Navigation image style'),
       '#description'   => $this->t('Style to be used on the image navigation.'),
       '#options'       => $image_styles,
-      '#empty_option'  => $this->t('Select'),
       '#default_value' => isset($settings['carouselNavigationImageStyle']) ? $settings['carouselNavigationImageStyle'] : '',
     ];
 

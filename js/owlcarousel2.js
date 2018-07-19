@@ -30,7 +30,7 @@
               center: owl_settings.center === 'true',
               mouseDrag: owl_settings.mouseDrag !== 'false',
               touchDrag: owl_settings.touchDrag !== 'false',
-              stagePadding: parseInt(owl_settings.stagePadding ? owl_settings.stagePadding : 0),
+              stagePadding: owl_settings.carouselNavigation !== 'true' ? parseInt(owl_settings.stagePadding ? owl_settings.stagePadding : 0) : 0,
               navText: owl_settings.carouselNavigation !== 'true' ? [owl_settings.previousText ? owl_settings.previousText : '<', owl_settings.previousText ? owl_settings.nextText : '>'] : []
             });
 

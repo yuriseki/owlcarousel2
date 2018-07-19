@@ -49,11 +49,13 @@ function owlcarousel2_theme() {
     ],
     'owlcarousel2_block'       => [
       'variables' => [
-        'content'              => NULL,
-        'id'                   => NULL,
-        'nav_titles'           => NULL,
-        'carousel_navigation'  => NULL,
-        'navigation_img_ratio' => NULL,
+        'content'             => NULL,
+        'id'                  => NULL,
+        'nav_titles'          => NULL,
+        'carousel_navigation' => NULL,
+        'nav_ratio'           => NULL,
+        'nav_height'          => NULL,
+        'nav_width'           => NULL,
       ],
       'template'  => 'block--owlcarousel2',
     ],
@@ -77,7 +79,9 @@ function owlcarousel2_preprocess_owlcarousel2(&$variables) {
   }
   $content    = $data['content'];
   $nav_titles = $data['navigation_titles'];
-  $nav_ratio  = $data['navigation_img_ratio'];
+  $nav_ratio  = $data['nav_ratio'];
+  $nav_height = $data['nav_height'];
+  $nav_width  = $data['nav_width'];
   $settings   = $carousel->get('settings')->getValue()[0];
 
   $carousel_navigation = isset($settings['carouselNavigation']) ? ($settings['carouselNavigation'] == 'true') : FALSE;
@@ -92,7 +96,9 @@ function owlcarousel2_preprocess_owlcarousel2(&$variables) {
   $variables['id']                     = $carousel->id();
   $variables['nav_titles']             = $nav_titles;
   $variables['carousel_navigation']    = $carousel_navigation;
-  $variables['navigation_img_ratio']   = $nav_ratio;
+  $variables['nav_ratio']              = $nav_ratio;
+  $variables['nav_height']             = $nav_height;
+  $variables['nav_width']              = $nav_width;
   $variables['#attached']['library'][] = 'owlcarousel2/owlcarousel2';
 
   $container = \Drupal::getContainer();

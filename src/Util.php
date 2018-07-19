@@ -69,14 +69,19 @@ class Util {
 
     $isTextNavigation = (isset($settings['textNavigation']) && $settings['textNavigation'] == 'true') ? TRUE : FALSE;
 
-    $content = '';
+    $content    = '';
+    $nav_height = 0;
+    $nav_width  = 0;
+    $nav_ratio  = 0;
     if (count($items)) {
       foreach ($items as $item) {
         if ($item['type'] == 'image') {
-          $data            = self::prepareImageCarousel($item, $carousel);
-          $content        .= $data['content'];
-          $nav_titles[]    = $data['navigation_titles'];
-          $nav_image_ratio = $data['nav_ratio'];
+          $data         = self::prepareImageCarousel($item, $carousel);
+          $content     .= $data['content'];
+          $nav_titles[] = $data['navigation_titles'];
+          $nav_ratio    = $data['nav_ratio'];
+          $nav_height   = $data['nav_height'];
+          $nav_width    = $data['nav_width'];
         }
         // TODO include navigation images on videos and views.
         elseif ($item['type'] == 'video') {
@@ -96,9 +101,11 @@ class Util {
     }
 
     return [
-      'content'              => $content,
-      'navigation_titles'    => $nav_titles,
-      'navigation_img_ratio' => $nav_image_ratio,
+      'content'           => $content,
+      'navigation_titles' => $nav_titles,
+      'nav_ratio'         => $nav_ratio,
+      'nav_height'        => $nav_height,
+      'nav_width'         => $nav_width,
     ];
 
   }
@@ -120,7 +127,9 @@ class Util {
   private static function prepareImageCarousel(array $item, OwlCarousel2 $carousel) {
     $content            = '';
     $nav_title          = [];
-    $image_nav_ratio    = 0;
+    $nav_ratio          = 0;
+    $nav_height         = 0;
+    $nav_width          = 0;
     $settings           = $carousel->getSettings();
     $is_text_navigation = (isset($settings['textNavigation']) && $settings['textNavigation'] == 'true') ? TRUE : FALSE;
 
@@ -138,9 +147,11 @@ class Util {
 
     // Set navigation title.
     if ($is_text_navigation) {
-      $info            = self::getNavigationInfo($item, $carousel);
-      $image_nav_ratio = $info['img_ratio'];
-      $nav_title       = $info['nav_title'];
+      $info       = self::getNavigationInfo($item, $carousel);
+      $nav_ratio  = $info['nav_ratio'];
+      $nav_title  = $info['nav_title'];
+      $nav_height = $info['nav_height'];
+      $nav_width  = $info['nav_width'];
     }
 
     if ($node) {
@@ -206,7 +217,9 @@ class Util {
     return [
       'content'           => $content,
       'navigation_titles' => $nav_title,
-      'nav_ratio'         => $image_nav_ratio,
+      'nav_ratio'         => $nav_ratio,
+      'nav_height'        => $nav_height,
+      'nav_width'         => $nav_width,
     ];
   }
 
@@ -225,7 +238,7 @@ class Util {
     $settings         = $carousel->getSettings();
     $navigation_image = isset($settings['navigationImage']) && $settings['navigationImage'] == 'true';
     $nav_style_name   = isset($settings['carouselNavigationImageStyle']) ? $settings['carouselNavigationImageStyle'] : 'thumbnail';
-    $image_nav_ratio  = 1;
+    $nav_ratio        = 1;
     $file             = NULL;
 
     if ($navigation_image && isset($item['navigation_image_id']) && $item['navigation_image_id']) {
@@ -234,17 +247,20 @@ class Util {
         $file = File::load($item['file_id']);
       }
     }
-
+    $nav_height    = 0;
+    $nav_width     = 0;
     $image_nav_url = '';
-    if ($navigation_image && $file instanceof File) {
+    if ($navigation_image && $file instanceof File && $nav_style_name) {
       $style         = \Drupal::entityTypeManager()
         ->getStorage('image_style')
         ->load($nav_style_name);
       $image_nav_url = $style->buildUrl($file->getFileUri());
 
-      $image_nav       = \Drupal::service('image.factory')
-        ->get($file->getFileUri());
-      $image_nav_ratio = $image_nav->getHeight() / $image_nav->getWidth() * 100;
+      $size = getimagesize($image_nav_url);
+
+      $nav_height = $size[1];
+      $nav_width = $size[0];
+      $nav_ratio = $nav_height / $nav_width * 100;
     }
 
     $node = is_null($item['entity_id']) ? FALSE : Node::load($item['entity_id']);
@@ -256,8 +272,10 @@ class Util {
     ];
 
     return [
-      'nav_title' => $nav_title,
-      'img_ratio' => $image_nav_ratio,
+      'nav_title'  => $nav_title,
+      'nav_ratio'  => $nav_ratio,
+      'nav_height' => $nav_height,
+      'nav_width'  => $nav_width,
     ];
   }
 
@@ -290,17 +308,23 @@ class Util {
     $content      = $item_display;
 
     // Set navigation title.
-    $image_nav_ratio = 1;
+    $nav_ratio = 1;
+    $nav_height = 0;
+    $nav_width = 0;
     if ($is_text_navigation) {
-      $info            = self::getNavigationInfo($item, $carousel);
-      $image_nav_ratio = $info['img_ratio'];
-      $nav_title       = $info['nav_title'];
+      $info       = self::getNavigationInfo($item, $carousel);
+      $nav_ratio  = $info['nav_ratio'];
+      $nav_title  = $info['nav_title'];
+      $nav_height = $info['nav_height'];
+      $nav_width  = $info['nav_width'];
     }
 
     return [
-      'content'              => $content,
-      'navigation_titles'    => $nav_title,
-      'navigation_img_ratio' => $image_nav_ratio,
+      'content'           => $content,
+      'navigation_titles' => $nav_title,
+      'nav_ratio'         => $nav_ratio,
+      'nav_height'        => $nav_height,
+      'nav_width'         => $nav_width,
     ];
   }
 
@@ -316,7 +340,7 @@ class Util {
    *   content - The view HTML.
    *   navigation_titles - The navigation titles for text navigation.
    */
-  private static function prepareViewCarousel(array $item, bool $isTextNavigation) {
+  private static function prepareViewCarousel(array $item, $isTextNavigation) {
     $view_id    = explode(':', $item['view_id'])[0];
     $display    = explode(':', $item['view_id'])[1];
     $content    = '';

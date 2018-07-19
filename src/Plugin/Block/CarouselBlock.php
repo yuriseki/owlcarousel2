@@ -105,21 +105,25 @@ class CarouselBlock extends BlockBase implements ContainerFactoryPluginInterface
     }
     $content    = $data['content'];
     $nav_titles = $data['navigation_titles'];
-    $nav_ratio  = $data['navigation_img_ratio'];
+    $nav_ratio  = $data['nav_ratio'];
+    $nav_height = $data['nav_height'];
+    $nav_width  = $data['nav_width'];
 
     $carousel_navigation = isset($settings['carouselNavigation']) ? ($settings['carouselNavigation'] == 'true') : FALSE;
     // If it is a carousel navigation, include a setting navigation size and set
     // the items per slide to 1.
     if ($carousel_navigation) {
       $settings['carouselNavigationSize'] = $settings['items_per_slide'];
-      $settings['items_per_slide'] = 1;
+      $settings['items_per_slide']        = 1;
     }
 
     $build['#theme']                 = 'owlcarousel2_block';
     $build['#content']['#markup']    = $content;
     $build['#nav_titles']            = $nav_titles;
     $build['#carousel_navigation']   = $carousel_navigation;
-    $build['#navigation_img_ratio']  = $nav_ratio;
+    $build['#nav_ratio']             = $nav_ratio;
+    $build['#nav_height']            = $nav_height;
+    $build['#nav_width']             = $nav_width;
     $build['#id']                    = $carousel->id();
     $build['#attached']['library'][] = 'owlcarousel2/owlcarousel2';
 
