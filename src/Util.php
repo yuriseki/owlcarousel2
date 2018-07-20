@@ -297,7 +297,8 @@ class Util {
 
     $video_url    = $item['video_url'];
     $item_display = '<div id="owlcarousel-video-id-' . $item['id'] . '" 
-    class="item-video owl-carousel-video-item" 
+    class="item-id item-video owl-carousel-video-item" 
+    data-owl-item-id="' . $item['id'] . '"
     data-hash="' . $item['id'] . '"
     data-youtube-controls="' . $item['youtube_controls'] . '"
     data-youtube-showinfo="' . $item['youtube_showinfo'] . '"

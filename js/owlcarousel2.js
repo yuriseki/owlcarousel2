@@ -164,7 +164,15 @@
 
         // Include active class to the first navigation item and remove others.
         $('.owlcarousel2-wrapper').each(function () {
-          $($(this).find('.owl-text-navigation-text').removeClass('active')[0]).addClass('active');
+          $($(this).find('.owl-text-navigation-item').removeClass('active')[0]).addClass('active');
+        });
+        $(('.owlcarousel2-navigation')).each(function () {
+          var firstItem = $(this).find('.owl-item.active')[0];
+          var items = $(firstItem).find('.item-id');
+          items.each(function () {
+            var itemId = this.getAttribute('data-owl-item-id');
+            $('.' + itemId).addClass('active');
+          });
         });
 
         // Include class active on the navigation text correspondent to the
@@ -176,14 +184,26 @@
             if (mutation.attributeName === 'class') {
               var attributeValue = $(mutation.target).prop(mutation.attributeName);
               if (attributeValue.indexOf('active') !== -1) {
-                var parent = $(mutation.target).parent();
-                // Get the carousel id.
-                var carouselId = parent.parent().parent().parent()[0].getAttribute('id');
-                $($('#' + carouselId).find('.owl-dots')[0]).find('.owl-dot').each(function (index, element) {
-                  if (element.className.indexOf('active') !== -1) {
-                    $($('#' + carouselId).find('.owl-text-navigation-text').removeClass('active')[index]).addClass('active');
+                var activeItem = $(mutation.target).find('.item-id');
+                var itemId = 0;
+                if (activeItem[0]) {
+                  var carouselNavigation = activeItem.parent().parent().parent().parent().parent();
+                  if (carouselNavigation[0].getAttribute('class').indexOf('owlcarousel2-navigation') !== -1) {
+                    itemId = activeItem[0].getAttribute('data-owl-item-id');
+                    $('.owl-text-navigation-item').removeClass('active');
+                    $('.' + itemId).addClass('active');
                   }
-                });
+                  else if (attributeValue.indexOf('active') !== -1) {
+                    var parent = $(mutation.target).parent();
+                    // Get the carousel id.
+                    var carouselId = parent.parent().parent().parent()[0].getAttribute('id');
+                    $($('#' + carouselId).find('.owl-dots')[0]).find('.owl-dot').each(function (index, element) {
+                      if (element.className.indexOf('active') !== -1) {
+                        $($('#' + carouselId).find('.owl-text-navigation-item').removeClass('active')[index]).addClass('active');
+                      }
+                    });
+                  }
+                }
               }
             }
           });

@@ -24,7 +24,7 @@
   </div>
   <div id="owl-text-navigation-{{ id }}" class="owl-text-navigation">
     {% for item in  nav_titles %}
-      <div class="owl-text-navigation-text" style="background: url({{ item.image_nav }}); background-size: cover;">
+      <div class="owl-text-navigation-item" style="background: url({{ item.image_nav }}); background-size: cover;">
         <a class="owl-text-navigation-link" href="#{{ item.id }}">{{ item.title }}</a>
         <div class="owl-text-navigation-text-bg"></div>
       </div>
@@ -32,15 +32,15 @@
   </div>
 </div>
 {% else %}
-  <div id="owlcarousel2-wrapper-{{ id }}" class="owlcarousel2-wrapper">
+  <div id="owlcarousel2-wrapper-{{ id }}" class="owlcarousel2-wrapper owlcarousel2-navigation">
     <div id="owlcarousel2-id-{{ id }}" class="owl-carousel owl-theme owlcarousel2" {{ attributes }}>
       {% if content %}
         {{ content }}
       {% endif %}
     </div>
-    <div id="owl-text-navigation-{{ id }}" class="owl-carousel owl-theme owlcarousel2 owl-text-navigation">
+    <div id="owl-text-navigation-{{ id }}" class="owl-carousel owl-theme owlcarousel2 owl-text-navigation owl-navigation-as-carousel">
       {% for item in  nav_titles %}
-        <div class="owl-text-navigation-item" onclick="location.href='#{{ item.id }}'" style="
+        <div class="owl-text-navigation-item {{ item.id }}" data-owl-item-id="{{ item.id }}" onclick="location.href='#{{ item.id }}'" style="
             cursor: pointer;
             display: flex;
             justify-content: center;
