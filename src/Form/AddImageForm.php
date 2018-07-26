@@ -357,7 +357,7 @@ class AddImageForm extends AddItemForm {
     }
 
     // Check if slide navigation image file has changed.
-    if ($navigation_image_id && !isset($current_item['navigation_image_id']) || ($current_item['navigation_image_id'] != $navigation_image_id) && $navigation_image_id) {
+    if ($navigation_image_id && !isset($current_item['navigation_image_id']) || (isset($current_item['navigation_image_id']) && $current_item['navigation_image_id'] != $navigation_image_id) && $navigation_image_id) {
       $previous = isset($current_item['navigation_image_id']) ? $current_item['navigation_image_id'] : 0;
       Util::changeFile($navigation_image_id, $carousel, $previous);
     }
