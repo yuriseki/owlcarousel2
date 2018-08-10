@@ -377,7 +377,7 @@ class OwlCarousel2Item {
    * @return string
    *   The titleColor value.
    */
-  public function getTitleColor(): string {
+  public function getTitleColor() {
     return $this->titleColor;
   }
 
