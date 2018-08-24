@@ -122,3 +122,17 @@ function owlcarousel2_preprocess_html(&$variables) {
   $key_value->get('owlcarousel2')->deleteAll();
 
 }
+
+/**
+ * Implements hook_theme_suggestions_node_alter().
+ */
+function owlcarousel2_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  // Make the owlcarousel2_node template the weakest choice.
+  if (in_array('owlcarousel2_node', $suggestions)) {
+    $key = array_search('owlcarousel2_node', $suggestions);
+    if ($key) {
+      array_unshift($suggestions, $suggestions[$key]);
+      unset($suggestions[$key]);
+    }
+  }
+}
